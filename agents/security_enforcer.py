@@ -3,10 +3,13 @@ Security enforcement agent for SNRE
 """
 
 import re
-import hashlib
 from typing import Any
 
-from contracts import AgentAnalysis, Change, ChangeType, Config, SNRESyntaxError
+from contracts import AgentAnalysis
+from contracts import Change
+from contracts import ChangeType
+from contracts import Config
+from contracts import SNRESyntaxError
 
 
 class SecurityEnforcer:
@@ -58,7 +61,9 @@ class SecurityEnforcer:
     def analyze(self, code: str) -> AgentAnalysis:
         """Analyze code for security vulnerabilities"""
         vulnerabilities = self.scan_vulnerabilities(code)
-        complexity = self._calculate_complexity(self._parse_code(code)) if code.strip() else 0.0
+        complexity = (
+            self._calculate_complexity(self._parse_code(code)) if code.strip() else 0.0
+        )
 
         return AgentAnalysis(
             agent_id=self.agent_id,
@@ -79,125 +84,163 @@ class SecurityEnforcer:
             if re.search(r"cursor\.execute\([^)]*%", line) and "?" not in line:
                 original = line
                 # Replace string formatting with parameterized queries
-                fixed = re.sub(r'%s|%d|%\w+', '?', line)
-                changes.append(Change(
-                    agent_id=self.agent_id,
-                    change_type=ChangeType.SECURITY,
-                    original_code=original,
-                    modified_code=fixed,
-                    line_start=i,
-                    line_end=i,
-                    confidence=0.9,
-                    description="Replace string formatting with parameterized queries",
-                    impact_score=0.9,
-                ))
+                fixed = re.sub(r"%s|%d|%\w+", "?", line)
+                changes.append(
+                    Change(
+                        agent_id=self.agent_id,
+                        change_type=ChangeType.SECURITY,
+                        original_code=original,
+                        modified_code=fixed,
+                        line_start=i,
+                        line_end=i,
+                        confidence=0.9,
+                        description="Replace string formatting with parameterized queries",
+                        impact_score=0.9,
+                    )
+                )
 
             # Hardcoded password fixes
-            if (re.search(r'password\s*=\s*["\'][^"\']{8,}["\']', line) and 
-                "os.environ" not in line and "getpass" not in line):
-                var_name = re.search(r'(\w+)\s*=', line).group(1) if re.search(r'(\w+)\s*=', line) else "password"
+            if (
+                re.search(r'password\s*=\s*["\'][^"\']{8,}["\']', line)
+                and "os.environ" not in line
+                and "getpass" not in line
+            ):
+                var_name = (
+                    re.search(r"(\w+)\s*=", line).group(1)
+                    if re.search(r"(\w+)\s*=", line)
+                    else "password"
+                )
                 fixed = f'{var_name} = os.environ.get("PASSWORD")'
-                changes.append(Change(
-                    agent_id=self.agent_id,
-                    change_type=ChangeType.SECURITY,
-                    original_code=line,
-                    modified_code=fixed,
-                    line_start=i,
-                    line_end=i,
-                    confidence=0.8,
-                    description="Move hardcoded password to environment variable",
-                    impact_score=0.8,
-                ))
+                changes.append(
+                    Change(
+                        agent_id=self.agent_id,
+                        change_type=ChangeType.SECURITY,
+                        original_code=line,
+                        modified_code=fixed,
+                        line_start=i,
+                        line_end=i,
+                        confidence=0.8,
+                        description="Move hardcoded password to environment variable",
+                        impact_score=0.8,
+                    )
+                )
 
             # API key fixes
-            if (re.search(r'api_key\s*=\s*["\'][A-Za-z0-9+/=]{16,}["\']', line) and 
-                "os.environ" not in line):
-                var_name = re.search(r'(\w+)\s*=', line).group(1) if re.search(r'(\w+)\s*=', line) else "api_key"
+            if (
+                re.search(r'api_key\s*=\s*["\'][A-Za-z0-9+/=]{16,}["\']', line)
+                and "os.environ" not in line
+            ):
+                var_name = (
+                    re.search(r"(\w+)\s*=", line).group(1)
+                    if re.search(r"(\w+)\s*=", line)
+                    else "api_key"
+                )
                 fixed = f'{var_name} = os.environ.get("API_KEY")'
-                changes.append(Change(
-                    agent_id=self.agent_id,
-                    change_type=ChangeType.SECURITY,
-                    original_code=line,
-                    modified_code=fixed,
-                    line_start=i,
-                    line_end=i,
-                    confidence=0.8,
-                    description="Move hardcoded API key to environment variable",
-                    impact_score=0.8,
-                ))
+                changes.append(
+                    Change(
+                        agent_id=self.agent_id,
+                        change_type=ChangeType.SECURITY,
+                        original_code=line,
+                        modified_code=fixed,
+                        line_start=i,
+                        line_end=i,
+                        confidence=0.8,
+                        description="Move hardcoded API key to environment variable",
+                        impact_score=0.8,
+                    )
+                )
 
             # Dangerous eval/exec usage
-            if ("eval(" in line or "exec(" in line) and ("input(" in line or "raw_input(" in line):
-                changes.append(Change(
-                    agent_id=self.agent_id,
-                    change_type=ChangeType.SECURITY,
-                    original_code=line,
-                    modified_code="# SECURITY: eval()/exec() with user input removed - use ast.literal_eval() for safe evaluation",
-                    line_start=i,
-                    line_end=i,
-                    confidence=0.95,
-                    description="Remove dangerous eval()/exec() with user input",
-                    impact_score=0.95,
-                ))
+            if ("eval(" in line or "exec(" in line) and (
+                "input(" in line or "raw_input(" in line
+            ):
+                changes.append(
+                    Change(
+                        agent_id=self.agent_id,
+                        change_type=ChangeType.SECURITY,
+                        original_code=line,
+                        modified_code="# SECURITY: eval()/exec() with user input removed - use ast.literal_eval() for safe evaluation",
+                        line_start=i,
+                        line_end=i,
+                        confidence=0.95,
+                        description="Remove dangerous eval()/exec() with user input",
+                        impact_score=0.95,
+                    )
+                )
 
             # Weak cryptographic hashes
             if "hashlib.md5(" in line or "hashlib.sha1(" in line:
-                fixed = line.replace("hashlib.md5(", "hashlib.sha256(").replace("hashlib.sha1(", "hashlib.sha256(")
-                changes.append(Change(
-                    agent_id=self.agent_id,
-                    change_type=ChangeType.SECURITY,
-                    original_code=line,
-                    modified_code=fixed,
-                    line_start=i,
-                    line_end=i,
-                    confidence=0.8,
-                    description="Replace weak hash algorithm with SHA-256",
-                    impact_score=0.7,
-                ))
+                fixed = line.replace("hashlib.md5(", "hashlib.sha256(").replace(
+                    "hashlib.sha1(", "hashlib.sha256("
+                )
+                changes.append(
+                    Change(
+                        agent_id=self.agent_id,
+                        change_type=ChangeType.SECURITY,
+                        original_code=line,
+                        modified_code=fixed,
+                        line_start=i,
+                        line_end=i,
+                        confidence=0.8,
+                        description="Replace weak hash algorithm with SHA-256",
+                        impact_score=0.7,
+                    )
+                )
 
             # Path traversal vulnerabilities
             if re.search(r'["\'][^"\']*\.\./[^"\']*["\']', line):
-                changes.append(Change(
-                    agent_id=self.agent_id,
-                    change_type=ChangeType.SECURITY,
-                    original_code=line,
-                    modified_code=f"# SECURITY: Path traversal detected - validate and sanitize path\n{line}",
-                    line_start=i,
-                    line_end=i,
-                    confidence=0.85,
-                    description="Add path validation to prevent directory traversal",
-                    impact_score=0.8,
-                ))
+                changes.append(
+                    Change(
+                        agent_id=self.agent_id,
+                        change_type=ChangeType.SECURITY,
+                        original_code=line,
+                        modified_code=f"# SECURITY: Path traversal detected - validate and sanitize path\n{line}",
+                        line_start=i,
+                        line_end=i,
+                        confidence=0.85,
+                        description="Add path validation to prevent directory traversal",
+                        impact_score=0.8,
+                    )
+                )
 
             # Unsafe random usage for security
-            if ("random.random(" in line and 
-                ("password" in line.lower() or "token" in line.lower() or "secret" in line.lower())):
-                fixed = line.replace("random.random()", "secrets.SystemRandom().random()")
-                changes.append(Change(
-                    agent_id=self.agent_id,
-                    change_type=ChangeType.SECURITY,
-                    original_code=line,
-                    modified_code=fixed,
-                    line_start=i,
-                    line_end=i,
-                    confidence=0.7,
-                    description="Use cryptographically secure random for security purposes",
-                    impact_score=0.6,
-                ))
+            if "random.random(" in line and (
+                "password" in line.lower()
+                or "token" in line.lower()
+                or "secret" in line.lower()
+            ):
+                fixed = line.replace(
+                    "random.random()", "secrets.SystemRandom().random()"
+                )
+                changes.append(
+                    Change(
+                        agent_id=self.agent_id,
+                        change_type=ChangeType.SECURITY,
+                        original_code=line,
+                        modified_code=fixed,
+                        line_start=i,
+                        line_end=i,
+                        confidence=0.7,
+                        description="Use cryptographically secure random for security purposes",
+                        impact_score=0.6,
+                    )
+                )
 
             # Command injection fixes
             if re.search(r"os\.system\([^)]*\+", line):
-                changes.append(Change(
-                    agent_id=self.agent_id,
-                    change_type=ChangeType.SECURITY,
-                    original_code=line,
-                    modified_code="# SECURITY: Use subprocess with shell=False instead of os.system()",
-                    line_start=i,
-                    line_end=i,
-                    confidence=0.9,
-                    description="Replace os.system() with safer subprocess call",
-                    impact_score=0.85,
-                ))
+                changes.append(
+                    Change(
+                        agent_id=self.agent_id,
+                        change_type=ChangeType.SECURITY,
+                        original_code=line,
+                        modified_code="# SECURITY: Use subprocess with shell=False instead of os.system()",
+                        line_start=i,
+                        line_end=i,
+                        confidence=0.9,
+                        description="Replace os.system() with safer subprocess call",
+                        impact_score=0.85,
+                    )
+                )
 
         return changes
 
@@ -206,7 +249,9 @@ class SecurityEnforcer:
         votes = {}
 
         for change in changes:
-            vote_key = f"{change.agent_id}_{change.line_start}_{change.change_type.value}"
+            vote_key = (
+                f"{change.agent_id}_{change.line_start}_{change.change_type.value}"
+            )
 
             # Prioritize security changes highly
             if change.change_type == ChangeType.SECURITY:
@@ -270,17 +315,18 @@ class SecurityEnforcer:
             r"shell\s*=\s*True",
             r"pickle\.loads\(",
         ]
-        
+
         for pattern in dangerous_patterns:
             if re.search(pattern, code):
                 return True
-        
+
         return False
 
     def _parse_code(self, code: str) -> Any:
         """Parse Python code using libcst"""
         try:
             import libcst as cst
+
             return cst.parse_module(code)
         except Exception as e:
             raise SNRESyntaxError(f"Failed to parse code: {str(e)}")
@@ -288,7 +334,7 @@ class SecurityEnforcer:
     def _calculate_complexity(self, tree) -> float:
         """Calculate basic cyclomatic complexity"""
         import libcst as cst
-        
+
         class ComplexityCalculator(cst.CSTVisitor):
             def __init__(self):
                 self.complexity = 1

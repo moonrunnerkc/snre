@@ -1,3 +1,6 @@
+import os
+import os
+
 """
 Sample code for SNRE refactoring demonstration
 This file contains various code patterns that SNRE agents can optimize

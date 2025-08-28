@@ -2,7 +2,8 @@
 Setup script for SNRE - for backwards compatibility
 """
 
-from setuptools import find_packages, setup
+from setuptools import find_packages
+from setuptools import setup
 
 # Read long description from README
 with open("README.md", encoding="utf-8") as fh:

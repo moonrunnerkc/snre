@@ -8,17 +8,17 @@ import uuid
 from datetime import datetime
 
 # Import BaseAgent with TYPE_CHECKING to avoid circular import
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING
+from typing import Any
+from typing import Optional
 from uuid import UUID
 
-from contracts import (
-    AgentNotFoundError,
-    Change,
-    Config,
-    RefactorSession,
-    RefactorStatus,
-    SessionNotFoundError,
-)
+from contracts import AgentNotFoundError
+from contracts import Change
+from contracts import Config
+from contracts import RefactorSession
+from contracts import RefactorStatus
+from contracts import SessionNotFoundError
 
 if TYPE_CHECKING:
     from contracts import BaseAgent

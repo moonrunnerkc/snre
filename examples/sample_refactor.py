@@ -8,18 +8,22 @@ This file contains various code patterns that SNRE agents can optimize
 password = "hardcoded_secret_123"
 api_key = "sk-1234567890abcdef"
 
+
 def vulnerable_query(user_id):
     """SQL injection vulnerability"""
     import sqlite3
-    conn = sqlite3.connect('database.db')
+
+    conn = sqlite3.connect("database.db")
     cursor = conn.cursor()
     # Vulnerable to SQL injection
     cursor.execute("SELECT * FROM users WHERE id = %s" % user_id)
     return cursor.fetchall()
 
+
 def unsafe_eval(user_input):
     """Dangerous eval usage"""
     return eval(user_input)
+
 
 # Loop inefficiencies for LoopSimplifier to optimize
 def inefficient_loops():
@@ -46,6 +50,7 @@ def inefficient_loops():
 
     return result1, flattened, temp_sum
 
+
 # Pattern optimization opportunities
 def pattern_issues():
     """Code patterns that can be optimized"""
@@ -54,7 +59,7 @@ def pattern_issues():
     # Can be converted to list comprehension
     squared = []
     for item in items:
-        squared.append(item ** 2)
+        squared.append(item**2)
 
     # Ternary operator opportunity
     def check_positive(x):
@@ -69,6 +74,7 @@ def pattern_issues():
 
     return squared, check_positive, result, temp_data
 
+
 # Complex nested function for complexity analysis
 def complex_function(data, threshold, mode):
     """Overly complex function with high cyclomatic complexity"""
@@ -79,25 +85,25 @@ def complex_function(data, threshold, mode):
 
     for item in data:
         if isinstance(item, dict):
-            if 'value' in item:
-                if item['value'] > threshold:
-                    if mode == 'strict':
+            if "value" in item:
+                if item["value"] > threshold:
+                    if mode == "strict":
                         try:
-                            processed = item['value'] * 2
+                            processed = item["value"] * 2
                             if processed < 100:
                                 result.append(processed)
                             else:
-                                if mode == 'strict':
+                                if mode == "strict":
                                     continue
                                 else:
                                     result.append(100)
                         except Exception:
                             continue
                     else:
-                        result.append(item['value'])
+                        result.append(item["value"])
                 else:
-                    if mode == 'lenient':
-                        result.append(item['value'] / 2)
+                    if mode == "lenient":
+                        result.append(item["value"] / 2)
             else:
                 continue
         else:
@@ -105,6 +111,7 @@ def complex_function(data, threshold, mode):
                 result.append(item)
 
     return result
+
 
 # Performance issues
 def performance_problems():
@@ -126,6 +133,9 @@ def performance_problems():
 
     return found_items, results
 
+
 if __name__ == "__main__":
     print("Sample code for SNRE refactoring")
-    print("Run: snre start --path examples/sample_refactor.py --agents security_enforcer,pattern_optimizer,loop_simplifier")
+    print(
+        "Run: snre start --path examples/sample_refactor.py --agents security_enforcer,pattern_optimizer,loop_simplifier"
+    )

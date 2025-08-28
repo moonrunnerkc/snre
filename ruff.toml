@@ -1,0 +1,36 @@
+# Ruff configuration for SNRE
+target-version = "py39"
+line-length = 88
+indent-width = 4
+
+[lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # Pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+]
+
+ignore = [
+    "E501",  # Line too long (handled by formatter)
+    "B008",  # Do not perform function calls in argument defaults
+    "B904",  # Use `raise ... from err`
+    "UP007", # Use `X | Y` for type annotations
+]
+
+[lint.per-file-ignores]
+"tests/*" = ["S101"]  # Allow assert in tests
+"scripts/*" = ["T201"] # Allow print in scripts
+
+[lint.isort]
+known-first-party = ["snre"]
+force-single-line = true
+
+[format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"

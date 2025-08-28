@@ -6,9 +6,14 @@ from datetime import datetime
 from typing import Any
 from uuid import UUID
 
-from flask import Flask, jsonify, request
+from flask import Flask
+from flask import jsonify
+from flask import request
 
-from contracts import AgentNotFoundError, Config, InvalidPathError, SessionNotFoundError
+from contracts import AgentNotFoundError
+from contracts import Config
+from contracts import InvalidPathError
+from contracts import SessionNotFoundError
 
 
 class APIInterface:
@@ -20,7 +25,9 @@ class APIInterface:
         self.app = Flask(__name__)
         self._setup_routes()
 
-    def start_refactor_endpoint(self, request_data: dict[str, Any]) -> tuple[dict[str, Any], int]:
+    def start_refactor_endpoint(
+        self, request_data: dict[str, Any]
+    ) -> tuple[dict[str, Any], int]:
         """POST /refactor/start endpoint"""
         try:
             target_path = request_data.get("target_path")
@@ -193,6 +200,24 @@ class APIInterface:
             result = self.cancel_session_endpoint(refactor_id)
             return jsonify(result[0]), result[1]
 
+        @self.app.route("/health", methods=["GET"])
+        def health():
+            return jsonify({"status": "healthy", "service": "SNRE"}), 200
+
     def run(self, host: str = "localhost", port: int = 8000) -> None:
         """Start the Flask API server"""
         self.app.run(host=host, port=port, debug=False)
+
+
+def create_app(coordinator=None, config: Config = None) -> Flask:
+    """Create Flask application with SNRE API routes"""
+    if config is None:
+        config = Config()
+
+    if coordinator is None:
+        from core.swarm_coordinator import SwarmCoordinator
+
+        coordinator = SwarmCoordinator(config)
+
+    api_interface = APIInterface(coordinator, config)
+    return api_interface.app

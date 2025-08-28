@@ -2,10 +2,15 @@
 Base agent implementation for SNRE
 """
 
-from abc import ABC, abstractmethod
+from abc import ABC
+from abc import abstractmethod
+
 import libcst as cst
 
-from contracts import AgentAnalysis, Change, Config, SNRESyntaxError
+from contracts import AgentAnalysis
+from contracts import Change
+from contracts import Config
+from contracts import SNRESyntaxError
 
 
 class BaseAgent(ABC):

@@ -5,10 +5,12 @@ Command line interface for SNRE
 import argparse
 import json
 import sys
-from typing import Any, Optional
+from typing import Any
+from typing import Optional
 from uuid import UUID
 
-from contracts import Config, SessionNotFoundError
+from contracts import Config
+from contracts import SessionNotFoundError
 
 
 class CLIInterface:
@@ -386,5 +388,3 @@ class CLIInterface:
         # Validate command
         validate_parser = subparsers.add_parser("validate", help="Validate code")
         validate_parser.add_argument("--path", required=True, help="Target code path")
-
-        return parser

@@ -9,12 +9,19 @@ from uuid import uuid4
 from agents.loop_simplifier import LoopSimplifier
 from agents.pattern_optimizer import PatternOptimizer
 from agents.security_enforcer import SecurityEnforcer
-from contracts import (
-    Config, AgentProfile, RefactorStatus, ChangeType, Change,
-    AgentAnalysis, ConsensusDecision, EvolutionStep, RefactorMetrics,
-    RefactorSession, SNREError, InvalidPathError, AgentNotFoundError,
-    SessionNotFoundError, ConsensusFailedError, TimeoutError, PermissionDeniedError
-)
+from contracts import AgentNotFoundError
+from contracts import AgentProfile
+from contracts import Change
+from contracts import ChangeType
+from contracts import Config
+from contracts import ConsensusFailedError
+from contracts import InvalidPathError
+from contracts import PermissionDeniedError
+from contracts import RefactorSession
+from contracts import RefactorStatus
+from contracts import SessionNotFoundError
+from contracts import SNREError
+from contracts import TimeoutError
 from core.change_tracker import ChangeTracker
 from core.consensus_engine import ConsensusEngine
 from core.evolution_recorder import EvolutionRecorder

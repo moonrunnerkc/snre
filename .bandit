@@ -1,0 +1,8 @@
+[bandit]
+exclude_dirs = ["tests", "venv", ".venv", "build", "dist"]
+skips = ["B101", "B601", "B602", "B603"]
+
+# B101: Skip assert_used test (allowed in tests)
+# B601: Skip shell_injection test for paramiko
+# B602: Skip subprocess_popen_with_shell_equals_true
+# B603: Skip subprocess_without_shell_equals_true

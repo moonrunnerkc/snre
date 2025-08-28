@@ -6,7 +6,8 @@ import ast
 import difflib
 import re
 
-from contracts import Config, RefactorMetrics
+from contracts import Config
+from contracts import RefactorMetrics
 
 
 class ChangeTracker:

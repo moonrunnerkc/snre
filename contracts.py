@@ -6,11 +6,13 @@ NO MODIFICATIONS ALLOWED after approval.
 All new parameters must go through Config(**kwargs).
 """
 
-from abc import ABC, abstractmethod
+from abc import ABC
+from abc import abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
+from typing import Optional
 from uuid import UUID
 
 # ============================================================================
@@ -615,7 +617,9 @@ class APIInterface:
         self.coordinator = coordinator
         self.config = config
 
-    def start_refactor_endpoint(self, request_data: dict[str, Any]) -> tuple[dict[str, Any], int]:
+    def start_refactor_endpoint(
+        self, request_data: dict[str, Any]
+    ) -> tuple[dict[str, Any], int]:
         """POST /refactor/start endpoint"""
         pass
 
@@ -727,7 +731,9 @@ class FileManager:
 class SNREError(Exception):
     """Base exception for SNRE errors"""
 
-    def __init__(self, code: str, message: str, details: Optional[dict[str, Any]] = None):
+    def __init__(
+        self, code: str, message: str, details: Optional[dict[str, Any]] = None
+    ):
         self.code = code
         self.message = message
         self.details = details or {}

@@ -4,7 +4,10 @@ Consensus engine for agent voting and decision making
 
 from datetime import datetime
 
-from contracts import BaseAgent, Change, Config, ConsensusDecision
+from contracts import BaseAgent
+from contracts import Change
+from contracts import Config
+from contracts import ConsensusDecision
 
 
 class ConsensusEngine:

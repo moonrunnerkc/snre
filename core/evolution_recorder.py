@@ -4,10 +4,13 @@ Evolution recording and snapshot management for SNRE
 
 import json
 import os
-from datetime import datetime, timedelta
+from datetime import datetime
+from datetime import timedelta
 from uuid import UUID
 
-from contracts import Change, Config, EvolutionStep
+from contracts import Change
+from contracts import Config
+from contracts import EvolutionStep
 
 
 class EvolutionRecorder:
