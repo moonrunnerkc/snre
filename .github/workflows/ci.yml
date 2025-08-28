@@ -31,7 +31,7 @@ jobs:
     - name: Install security scan dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install bandit[toml]==1.7.5 safety==2.3.5
+        pip install bandit[toml]==1.7.5 safety==2.3.5 pbr==6.0.0
         
     - name: Create bandit config
       run: |
