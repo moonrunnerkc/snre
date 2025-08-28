@@ -227,18 +227,18 @@ class TestCoreComponents:
         # Test recording (may need different method signature)
         try:
             recorder.record_snapshot(session_id, test_data, "initial")
-        except:
+        except Exception:
             # Try alternative method signature
             try:
                 recorder.record_step(session_id, test_data)
-            except:
+            except Exception:
                 pass  # Method may not be implemented yet
 
         # Test retrieval
         try:
             history = recorder.get_evolution_history(session_id)
             assert isinstance(history, list)
-        except:
+        except Exception:
             pass  # Method may not be implemented yet
 
     @pytest.mark.skipif(
@@ -258,7 +258,7 @@ class TestCoreComponents:
         for agent in agents:
             try:
                 coordinator.register_agent(agent)
-            except:
+            except Exception:
                 pass  # May not be implemented yet
 
         # Create test file

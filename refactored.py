@@ -1,5 +1,4 @@
 import os
-import os
 
 """
 Sample code for SNRE refactoring demonstration

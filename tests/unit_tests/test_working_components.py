@@ -213,7 +213,7 @@ class TestCoreModuleImports:
 
         for module_name in modules_to_test:
             try:
-                module = __import__(module_name, fromlist=[""])
+                __import__(module_name, fromlist=[""])
                 working_modules.append(module_name)
                 print(f"✅ {module_name} imports OK")
             except Exception as e:
