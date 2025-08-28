@@ -1,0 +1,68 @@
+agents:
+  pattern_optimizer:
+    name: "Pattern Optimizer"
+    priority: 7
+    enabled: true
+    patterns:
+      - "list_comprehension_opportunity"
+      - "ternary_operator_opportunity"
+      - "unnecessary_temp_variable"
+      - "redundant_operations"
+    confidence_threshold: 0.6
+    config:
+      aggressive_optimization: false
+      preserve_readability: true
+      
+  security_enforcer:
+    name: "Security Enforcer"
+    priority: 9
+    enabled: true
+    patterns:
+      - "sql_injection_risks"
+      - "command_injection_risks"
+      - "path_traversal_risks" 
+      - "hardcoded_secrets"
+      - "unsafe_eval_usage"
+    confidence_threshold: 0.8
+    config:
+      strict_mode: true
+      auto_fix_secrets: true
+      
+  loop_simplifier:
+    name: "Loop Simplifier"
+    priority: 6
+    enabled: true
+    patterns:
+      - "nested_loops"
+      - "range_len_pattern"
+      - "inefficient_iterations"
+      - "excessive_nesting"
+    confidence_threshold: 0.7
+    config:
+      max_nesting_level: 3
+      prefer_comprehensions: true
+      
+  performance_optimizer:
+    name: "Performance Optimizer"
+    priority: 5
+    enabled: false
+    patterns:
+      - "slow_algorithms"
+      - "memory_inefficient"
+      - "io_bottlenecks"
+    confidence_threshold: 0.5
+    config:
+      profile_before_optimize: true
+      
+  readability_enhancer:
+    name: "Readability Enhancer"
+    priority: 4
+    enabled: false
+    patterns:
+      - "long_functions"
+      - "unclear_variable_names"
+      - "missing_docstrings"
+    confidence_threshold: 0.4
+    config:
+      max_function_length: 50
+      enforce_docstrings: false

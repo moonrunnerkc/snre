@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  snre-api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs  
+      - ./config:/app/config
+    environment:
+      - PYTHONPATH=/app
+      - FLASK_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/refactor/sessions"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      
+  snre-worker:
+    build: .
+    command: ["python", "-c", "import time; time.sleep(3600)"]  # Keep container running
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./config:/app/config
+      - /var/run/docker.sock:/var/run/docker.sock  # For git integration
+    environment:
+      - PYTHONPATH=/app
+      - SNRE_MODE=worker
+    restart: unless-stopped
+    depends_on:
+      - snre-api
+
+volumes:
+  snre_data:
+    driver: local
+  snre_logs:
+    driver: local
