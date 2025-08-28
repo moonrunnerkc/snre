@@ -17,9 +17,11 @@ from uuid import UUID
 # CONFIGURATION CONTRACTS
 # ============================================================================
 
+
 @dataclass
 class Config:
     """System configuration with extensibility through kwargs"""
+
     max_concurrent_agents: int = 5
     consensus_threshold: float = 0.6
     max_iterations: int = 10
@@ -40,6 +42,7 @@ class Config:
 @dataclass
 class AgentProfile:
     """Agent configuration profile"""
+
     name: str
     priority: int
     enabled: bool
@@ -52,8 +55,10 @@ class AgentProfile:
 # CORE DATA STRUCTURES
 # ============================================================================
 
+
 class RefactorStatus(Enum):
     """Refactoring session status"""
+
     STARTED = "started"
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
@@ -63,6 +68,7 @@ class RefactorStatus(Enum):
 
 class ChangeType(Enum):
     """Types of code changes"""
+
     OPTIMIZATION = "optimization"
     SECURITY = "security"
     READABILITY = "readability"
@@ -73,6 +79,7 @@ class ChangeType(Enum):
 @dataclass
 class Change:
     """Represents a single code change suggestion"""
+
     agent_id: str
     change_type: ChangeType
     original_code: str
@@ -86,36 +93,37 @@ class Change:
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for JSON serialization"""
         return {
-            'agent_id': self.agent_id,
-            'change_type': self.change_type.value,
-            'original_code': self.original_code,
-            'modified_code': self.modified_code,
-            'line_start': self.line_start,
-            'line_end': self.line_end,
-            'confidence': self.confidence,
-            'description': self.description,
-            'impact_score': self.impact_score
+            "agent_id": self.agent_id,
+            "change_type": self.change_type.value,
+            "original_code": self.original_code,
+            "modified_code": self.modified_code,
+            "line_start": self.line_start,
+            "line_end": self.line_end,
+            "confidence": self.confidence,
+            "description": self.description,
+            "impact_score": self.impact_score,
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> 'Change':
+    def from_dict(cls, data: dict[str, Any]) -> "Change":
         """Create from dictionary for JSON deserialization"""
         return cls(
-            agent_id=data['agent_id'],
-            change_type=ChangeType(data['change_type']),
-            original_code=data['original_code'],
-            modified_code=data['modified_code'],
-            line_start=data['line_start'],
-            line_end=data['line_end'],
-            confidence=data['confidence'],
-            description=data['description'],
-            impact_score=data['impact_score']
+            agent_id=data["agent_id"],
+            change_type=ChangeType(data["change_type"]),
+            original_code=data["original_code"],
+            modified_code=data["modified_code"],
+            line_start=data["line_start"],
+            line_end=data["line_end"],
+            confidence=data["confidence"],
+            description=data["description"],
+            impact_score=data["impact_score"],
         )
 
 
 @dataclass
 class AgentAnalysis:
     """Result of agent code analysis"""
+
     agent_id: str
     issues_found: int
     complexity_score: float
@@ -127,6 +135,7 @@ class AgentAnalysis:
 @dataclass
 class ConsensusDecision:
     """Record of consensus voting"""
+
     timestamp: datetime
     decision: str
     votes: dict[str, float]
@@ -136,28 +145,29 @@ class ConsensusDecision:
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for JSON serialization"""
         return {
-            'timestamp': self.timestamp.isoformat(),
-            'decision': self.decision,
-            'votes': self.votes,
-            'winning_agent': self.winning_agent,
-            'confidence': self.confidence
+            "timestamp": self.timestamp.isoformat(),
+            "decision": self.decision,
+            "votes": self.votes,
+            "winning_agent": self.winning_agent,
+            "confidence": self.confidence,
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> 'ConsensusDecision':
+    def from_dict(cls, data: dict[str, Any]) -> "ConsensusDecision":
         """Create from dictionary for JSON deserialization"""
         return cls(
-            timestamp=datetime.fromisoformat(data['timestamp']),
-            decision=data['decision'],
-            votes=data['votes'],
-            winning_agent=data['winning_agent'],
-            confidence=data['confidence']
+            timestamp=datetime.fromisoformat(data["timestamp"]),
+            decision=data["decision"],
+            votes=data["votes"],
+            winning_agent=data["winning_agent"],
+            confidence=data["confidence"],
         )
 
 
 @dataclass
 class EvolutionStep:
     """Single step in evolution history"""
+
     iteration: int
     timestamp: datetime
     agent: str
@@ -169,32 +179,33 @@ class EvolutionStep:
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for JSON serialization"""
         return {
-            'iteration': self.iteration,
-            'timestamp': self.timestamp.isoformat(),
-            'agent': self.agent,
-            'change_type': self.change_type.value,
-            'confidence': self.confidence,
-            'description': self.description,
-            'code_diff': self.code_diff
+            "iteration": self.iteration,
+            "timestamp": self.timestamp.isoformat(),
+            "agent": self.agent,
+            "change_type": self.change_type.value,
+            "confidence": self.confidence,
+            "description": self.description,
+            "code_diff": self.code_diff,
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> 'EvolutionStep':
+    def from_dict(cls, data: dict[str, Any]) -> "EvolutionStep":
         """Create from dictionary for JSON deserialization"""
         return cls(
-            iteration=data['iteration'],
-            timestamp=datetime.fromisoformat(data['timestamp']),
-            agent=data['agent'],
-            change_type=ChangeType(data['change_type']),
-            confidence=data['confidence'],
-            description=data['description'],
-            code_diff=data['code_diff']
+            iteration=data["iteration"],
+            timestamp=datetime.fromisoformat(data["timestamp"]),
+            agent=data["agent"],
+            change_type=ChangeType(data["change_type"]),
+            confidence=data["confidence"],
+            description=data["description"],
+            code_diff=data["code_diff"],
         )
 
 
 @dataclass
 class RefactorMetrics:
     """Metrics for completed refactoring"""
+
     lines_changed: int
     complexity_delta: float
     security_improvements: int
@@ -204,28 +215,29 @@ class RefactorMetrics:
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for JSON serialization"""
         return {
-            'lines_changed': self.lines_changed,
-            'complexity_delta': self.complexity_delta,
-            'security_improvements': self.security_improvements,
-            'performance_gains': self.performance_gains,
-            'agent_contributions': self.agent_contributions
+            "lines_changed": self.lines_changed,
+            "complexity_delta": self.complexity_delta,
+            "security_improvements": self.security_improvements,
+            "performance_gains": self.performance_gains,
+            "agent_contributions": self.agent_contributions,
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> 'RefactorMetrics':
+    def from_dict(cls, data: dict[str, Any]) -> "RefactorMetrics":
         """Create from dictionary for JSON deserialization"""
         return cls(
-            lines_changed=data['lines_changed'],
-            complexity_delta=data['complexity_delta'],
-            security_improvements=data['security_improvements'],
-            performance_gains=data['performance_gains'],
-            agent_contributions=data['agent_contributions']
+            lines_changed=data["lines_changed"],
+            complexity_delta=data["complexity_delta"],
+            security_improvements=data["security_improvements"],
+            performance_gains=data["performance_gains"],
+            agent_contributions=data["agent_contributions"],
         )
 
 
 @dataclass
 class RefactorSession:
     """Complete refactoring session state"""
+
     refactor_id: UUID
     target_path: str
     status: RefactorStatus
@@ -243,44 +255,57 @@ class RefactorSession:
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for JSON serialization"""
         return {
-            'refactor_id': str(self.refactor_id),
-            'target_path': self.target_path,
-            'status': self.status.value,
-            'progress': self.progress,
-            'agent_set': self.agent_set,
-            'original_code': self.original_code,
-            'refactored_code': self.refactored_code,
-            'evolution_history': [step.to_dict() for step in self.evolution_history],
-            'consensus_log': [decision.to_dict() for decision in self.consensus_log],
-            'metrics': self.metrics.to_dict() if self.metrics else None,
-            'started_at': self.started_at.isoformat(),
-            'completed_at': self.completed_at.isoformat() if self.completed_at else None,
-            'error_message': self.error_message
+            "refactor_id": str(self.refactor_id),
+            "target_path": self.target_path,
+            "status": self.status.value,
+            "progress": self.progress,
+            "agent_set": self.agent_set,
+            "original_code": self.original_code,
+            "refactored_code": self.refactored_code,
+            "evolution_history": [step.to_dict() for step in self.evolution_history],
+            "consensus_log": [decision.to_dict() for decision in self.consensus_log],
+            "metrics": self.metrics.to_dict() if self.metrics else None,
+            "started_at": self.started_at.isoformat(),
+            "completed_at": self.completed_at.isoformat()
+            if self.completed_at
+            else None,
+            "error_message": self.error_message,
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> 'RefactorSession':
+    def from_dict(cls, data: dict[str, Any]) -> "RefactorSession":
         """Create from dictionary for JSON deserialization"""
         return cls(
-            refactor_id=UUID(data['refactor_id']),
-            target_path=data['target_path'],
-            status=RefactorStatus(data['status']),
-            progress=data['progress'],
-            agent_set=data['agent_set'],
-            original_code=data['original_code'],
-            refactored_code=data.get('refactored_code'),
-            evolution_history=[EvolutionStep.from_dict(step) for step in data.get('evolution_history', [])],
-            consensus_log=[ConsensusDecision.from_dict(decision) for decision in data.get('consensus_log', [])],
-            metrics=RefactorMetrics.from_dict(data['metrics']) if data.get('metrics') else None,
-            started_at=datetime.fromisoformat(data['started_at']),
-            completed_at=datetime.fromisoformat(data['completed_at']) if data.get('completed_at') else None,
-            error_message=data.get('error_message')
+            refactor_id=UUID(data["refactor_id"]),
+            target_path=data["target_path"],
+            status=RefactorStatus(data["status"]),
+            progress=data["progress"],
+            agent_set=data["agent_set"],
+            original_code=data["original_code"],
+            refactored_code=data.get("refactored_code"),
+            evolution_history=[
+                EvolutionStep.from_dict(step)
+                for step in data.get("evolution_history", [])
+            ],
+            consensus_log=[
+                ConsensusDecision.from_dict(decision)
+                for decision in data.get("consensus_log", [])
+            ],
+            metrics=RefactorMetrics.from_dict(data["metrics"])
+            if data.get("metrics")
+            else None,
+            started_at=datetime.fromisoformat(data["started_at"]),
+            completed_at=datetime.fromisoformat(data["completed_at"])
+            if data.get("completed_at")
+            else None,
+            error_message=data.get("error_message"),
         )
 
 
 # ============================================================================
 # AGENT CONTRACTS
 # ============================================================================
+
 
 class BaseAgent(ABC):
     """Abstract base class for all refactoring agents"""
@@ -309,10 +334,12 @@ class BaseAgent(ABC):
         """Validate that changes are safe and beneficial"""
         pass
 
+    @abstractmethod
     def get_priority(self) -> int:
         """Get agent priority for consensus"""
         pass
 
+    @abstractmethod
     def get_confidence_threshold(self) -> float:
         """Get minimum confidence threshold"""
         pass
@@ -324,18 +351,23 @@ class PatternOptimizer(BaseAgent):
     def __init__(self, agent_id: str, config: Config):
         super().__init__(agent_id, config)
 
+    @abstractmethod
     def analyze(self, code: str) -> AgentAnalysis:
         pass
 
+    @abstractmethod
     def suggest_changes(self, code: str) -> list[Change]:
         pass
 
+    @abstractmethod
     def vote(self, changes: list[Change]) -> dict[str, float]:
         pass
 
+    @abstractmethod
     def validate_result(self, original: str, modified: str) -> bool:
         pass
 
+    @abstractmethod
     def detect_patterns(self, code: str) -> list[str]:
         """Detect optimization patterns in code"""
         pass
@@ -347,18 +379,23 @@ class SecurityEnforcer(BaseAgent):
     def __init__(self, agent_id: str, config: Config):
         super().__init__(agent_id, config)
 
+    @abstractmethod
     def analyze(self, code: str) -> AgentAnalysis:
         pass
 
+    @abstractmethod
     def suggest_changes(self, code: str) -> list[Change]:
         pass
 
+    @abstractmethod
     def vote(self, changes: list[Change]) -> dict[str, float]:
         pass
 
+    @abstractmethod
     def validate_result(self, original: str, modified: str) -> bool:
         pass
 
+    @abstractmethod
     def scan_vulnerabilities(self, code: str) -> list[str]:
         """Scan for security vulnerabilities"""
         pass
@@ -370,18 +407,23 @@ class LoopSimplifier(BaseAgent):
     def __init__(self, agent_id: str, config: Config):
         super().__init__(agent_id, config)
 
+    @abstractmethod
     def analyze(self, code: str) -> AgentAnalysis:
         pass
 
+    @abstractmethod
     def suggest_changes(self, code: str) -> list[Change]:
         pass
 
+    @abstractmethod
     def vote(self, changes: list[Change]) -> dict[str, float]:
         pass
 
+    @abstractmethod
     def validate_result(self, original: str, modified: str) -> bool:
         pass
 
+    @abstractmethod
     def optimize_loops(self, code: str) -> list[Change]:
         """Find and optimize inefficient loops"""
         pass
@@ -390,6 +432,7 @@ class LoopSimplifier(BaseAgent):
 # ============================================================================
 # CORE SYSTEM CONTRACTS
 # ============================================================================
+
 
 class SwarmCoordinator:
     """Coordinates multiple agents in refactoring process"""
@@ -403,8 +446,12 @@ class SwarmCoordinator:
         """Register an agent with the swarm"""
         pass
 
-    def start_refactor(self, target_path: str, agent_set: list[str],
-                      config_overrides: Optional[dict] = None) -> UUID:
+    def start_refactor(
+        self,
+        target_path: str,
+        agent_set: list[str],
+        config_overrides: Optional[dict[str, Any]] = None,
+    ) -> UUID:
         """Start a new refactoring session"""
         pass
 
@@ -436,7 +483,9 @@ class SwarmCoordinator:
         """Load all sessions from persistent storage"""
         pass
 
-    def apply_session_to_file(self, refactor_id: UUID, create_backup: bool = True) -> bool:
+    def apply_session_to_file(
+        self, refactor_id: UUID, create_backup: bool = True
+    ) -> bool:
         """Apply refactored code from session to the original file"""
         pass
 
@@ -451,17 +500,21 @@ class ConsensusEngine:
     def __init__(self, config: Config):
         self.config = config
 
-    def collect_votes(self, agents: dict[str, BaseAgent],
-                     changes: list[Change]) -> dict[str, dict[str, float]]:
+    def collect_votes(
+        self, agents: dict[str, BaseAgent], changes: list[Change]
+    ) -> dict[str, dict[str, float]]:
         """Collect votes from all agents on proposed changes"""
         pass
 
-    def calculate_consensus(self, votes: dict[str, dict[str, float]]) -> ConsensusDecision:
+    def calculate_consensus(
+        self, votes: dict[str, dict[str, float]]
+    ) -> ConsensusDecision:
         """Calculate consensus from agent votes"""
         pass
 
-    def apply_overrides(self, decision: ConsensusDecision,
-                       priority_agents: list[str]) -> ConsensusDecision:
+    def apply_overrides(
+        self, decision: ConsensusDecision, priority_agents: list[str]
+    ) -> ConsensusDecision:
         """Apply priority agent overrides"""
         pass
 
@@ -520,6 +573,7 @@ class EvolutionRecorder:
 # INTERFACE CONTRACTS
 # ============================================================================
 
+
 class CLIInterface:
     """Command line interface for SNRE"""
 
@@ -535,7 +589,9 @@ class CLIInterface:
         """Handle status query command"""
         pass
 
-    def handle_result_command(self, refactor_id: str, output_file: Optional[str] = None) -> None:
+    def handle_result_command(
+        self, refactor_id: str, output_file: Optional[str] = None
+    ) -> None:
         """Handle result query command"""
         pass
 
@@ -559,23 +615,23 @@ class APIInterface:
         self.coordinator = coordinator
         self.config = config
 
-    def start_refactor_endpoint(self, request_data: dict[str, Any]) -> dict[str, Any]:
+    def start_refactor_endpoint(self, request_data: dict[str, Any]) -> tuple[dict[str, Any], int]:
         """POST /refactor/start endpoint"""
         pass
 
-    def get_status_endpoint(self, refactor_id: str) -> dict[str, Any]:
+    def get_status_endpoint(self, refactor_id: str) -> tuple[dict[str, Any], int]:
         """GET /refactor/status/<refactor_id> endpoint"""
         pass
 
-    def get_result_endpoint(self, refactor_id: str) -> dict[str, Any]:
+    def get_result_endpoint(self, refactor_id: str) -> tuple[dict[str, Any], int]:
         """GET /refactor/result/<refactor_id> endpoint"""
         pass
 
-    def list_sessions_endpoint(self) -> dict[str, Any]:
+    def list_sessions_endpoint(self) -> tuple[dict[str, Any], int]:
         """GET /refactor/sessions endpoint"""
         pass
 
-    def cancel_session_endpoint(self, refactor_id: str) -> dict[str, Any]:
+    def cancel_session_endpoint(self, refactor_id: str) -> tuple[dict[str, Any], int]:
         """DELETE /refactor/session/<refactor_id> endpoint"""
         pass
 
@@ -607,6 +663,7 @@ class IntegrationHook:
 # ============================================================================
 # UTILITY CONTRACTS
 # ============================================================================
+
 
 class CodeParser:
     """Code parsing and AST manipulation utilities"""
@@ -666,10 +723,11 @@ class FileManager:
 # ERROR HANDLING CONTRACTS
 # ============================================================================
 
+
 class SNREError(Exception):
     """Base exception for SNRE errors"""
 
-    def __init__(self, code: str, message: str, details: Optional[dict] = None):
+    def __init__(self, code: str, message: str, details: Optional[dict[str, Any]] = None):
         self.code = code
         self.message = message
         self.details = details or {}
@@ -700,8 +758,10 @@ class SessionNotFoundError(SNREError):
 class ConsensusFailedError(SNREError):
     """Agents could not reach consensus"""
 
-    def __init__(self, details: dict):
-        super().__init__("CONSENSUS_FAILED", "Agents failed to reach consensus", details)
+    def __init__(self, details: dict[str, Any]):
+        super().__init__(
+            "CONSENSUS_FAILED", "Agents failed to reach consensus", details
+        )
 
 
 class SNRESyntaxError(SNREError):
@@ -729,6 +789,7 @@ class PermissionDeniedError(SNREError):
 # FACTORY CONTRACTS
 # ============================================================================
 
+
 class AgentFactory:
     """Factory for creating agent instances"""
 
@@ -752,6 +813,7 @@ class AgentFactory:
 # ============================================================================
 # CONTRACT VALIDATION
 # ============================================================================
+
 
 def validate_contracts() -> bool:
     """Validate that all contracts are properly defined"""

@@ -33,7 +33,7 @@ class SwarmCoordinator:
 
     def __init__(self, config: Config):
         self.config = config
-        self.agents: dict[str, 'BaseAgent'] = {}
+        self.agents: dict[str, "BaseAgent"] = {}
         self.active_sessions: dict[UUID, RefactorSession] = {}
         self.consensus_engine = ConsensusEngine(config)
         self.change_tracker = ChangeTracker(config)
@@ -46,12 +46,16 @@ class SwarmCoordinator:
         # Load existing sessions on startup
         self.load_all_sessions()
 
-    def register_agent(self, agent: 'BaseAgent') -> None:
+    def register_agent(self, agent: "BaseAgent") -> None:
         """Register an agent with the swarm"""
         self.agents[agent.agent_id] = agent
 
-    def start_refactor(self, target_path: str, agent_set: list[str],
-                      config_overrides: Optional[dict] = None) -> UUID:
+    def start_refactor(
+        self,
+        target_path: str,
+        agent_set: list[str],
+        config_overrides: Optional[dict] = None,
+    ) -> UUID:
         """Start a new refactoring session"""
         # Validate agents exist
         for agent_id in agent_set:
@@ -63,10 +67,11 @@ class SwarmCoordinator:
 
         # Read target file
         try:
-            with open(target_path, encoding='utf-8') as f:
+            with open(target_path, encoding="utf-8") as f:
                 original_code = f.read()
         except FileNotFoundError:
             from contracts import InvalidPathError
+
             raise InvalidPathError(target_path)
 
         session = RefactorSession(
@@ -82,7 +87,7 @@ class SwarmCoordinator:
             metrics=None,
             started_at=datetime.now(),
             completed_at=None,
-            error_message=None
+            error_message=None,
         )
 
         self.active_sessions[session_id] = session
@@ -115,7 +120,7 @@ class SwarmCoordinator:
                 agent_votes[agent_id] = {
                     "score": 0.0,
                     "confidence": agent.get_confidence_threshold(),
-                    "suggestions": 0
+                    "suggestions": 0,
                 }
 
         return {
@@ -123,7 +128,7 @@ class SwarmCoordinator:
             "progress": session.progress,
             "current_iteration": len(session.evolution_history),
             "agent_votes": agent_votes,
-            "last_update": session.started_at.isoformat()
+            "last_update": session.started_at.isoformat(),
         }
 
     def get_session_result(self, refactor_id: UUID) -> RefactorSession:
@@ -167,7 +172,7 @@ class SwarmCoordinator:
                 "refactor_id": str(session.refactor_id),
                 "target_path": session.target_path,
                 "status": session.status.value,
-                "started_at": session.started_at.isoformat()
+                "started_at": session.started_at.isoformat(),
             }
             for session in self.active_sessions.values()
             if session.status in [RefactorStatus.STARTED, RefactorStatus.IN_PROGRESS]
@@ -179,7 +184,7 @@ class SwarmCoordinator:
 
         try:
             session_data = session.to_dict()
-            with open(session_file, 'w', encoding='utf-8') as f:
+            with open(session_file, "w", encoding="utf-8") as f:
                 json.dump(session_data, f, indent=2, ensure_ascii=False)
         except Exception as e:
             # Log error but don't fail the operation
@@ -193,7 +198,7 @@ class SwarmCoordinator:
             return None
 
         try:
-            with open(session_file, encoding='utf-8') as f:
+            with open(session_file, encoding="utf-8") as f:
                 session_data = json.load(f)
 
             return RefactorSession.from_dict(session_data)
@@ -207,7 +212,7 @@ class SwarmCoordinator:
             return
 
         for filename in os.listdir(self.sessions_dir):
-            if filename.endswith('.json'):
+            if filename.endswith(".json"):
                 try:
                     session_id_str = filename[:-5]  # Remove .json extension
                     session_id = UUID(session_id_str)
@@ -250,34 +255,44 @@ class SwarmCoordinator:
 
                 # Check for convergence - no meaningful changes suggested
                 if not all_changes:
-                    print(f"Convergence reached: No more changes suggested at iteration {iteration}")
+                    print(
+                        f"Convergence reached: No more changes suggested at iteration {iteration}"
+                    )
                     break
 
                 # Filter out changes that wouldn't actually modify the code
                 meaningful_changes = []
                 for change in all_changes:
-                    current_lines = current_code.split('\n')
-                    if (change.line_start < len(current_lines) and
-                        current_lines[change.line_start] != change.modified_code):
+                    current_lines = current_code.split("\n")
+                    if (
+                        change.line_start < len(current_lines)
+                        and current_lines[change.line_start] != change.modified_code
+                    ):
                         meaningful_changes.append(change)
 
                 if not meaningful_changes:
                     consecutive_no_change_iterations += 1
-                    print(f"No meaningful changes at iteration {iteration} (consecutive: {consecutive_no_change_iterations})")
+                    print(
+                        f"No meaningful changes at iteration {iteration} (consecutive: {consecutive_no_change_iterations})"
+                    )
 
                     # Exit if we've had several iterations with no meaningful changes
                     if consecutive_no_change_iterations >= 3:
-                        print("Convergence reached: No meaningful changes for 3 consecutive iterations")
+                        print(
+                            "Convergence reached: No meaningful changes for 3 consecutive iterations"
+                        )
                         break
                     continue
                 else:
                     consecutive_no_change_iterations = 0
 
                 # Get consensus on meaningful changes
-                decision = self.consensus_engine.calculate_consensus({
-                    agent_id: self.agents[agent_id].vote(meaningful_changes)
-                    for agent_id in session.agent_set
-                })
+                decision = self.consensus_engine.calculate_consensus(
+                    {
+                        agent_id: self.agents[agent_id].vote(meaningful_changes)
+                        for agent_id in session.agent_set
+                    }
+                )
 
                 session.consensus_log.append(decision)
 
@@ -297,17 +312,25 @@ class SwarmCoordinator:
                             )
                             session.evolution_history.append(step)
 
-                            print(f"Applied change at iteration {iteration}: {best_change.description}")
+                            print(
+                                f"Applied change at iteration {iteration}: {best_change.description}"
+                            )
                         else:
-                            print(f"Change did not modify code at iteration {iteration}")
+                            print(
+                                f"Change did not modify code at iteration {iteration}"
+                            )
                     else:
-                        print(f"Best change confidence ({best_change.confidence:.2f}) below threshold ({self.config.consensus_threshold})")
+                        print(
+                            f"Best change confidence ({best_change.confidence:.2f}) below threshold ({self.config.consensus_threshold})"
+                        )
 
                 # Check if code hasn't changed for several iterations
                 if current_code == last_code_state:
                     consecutive_no_change_iterations += 1
                     if consecutive_no_change_iterations >= 3:
-                        print("Convergence reached: Code unchanged for 3 consecutive iterations")
+                        print(
+                            "Convergence reached: Code unchanged for 3 consecutive iterations"
+                        )
                         break
                 else:
                     last_code_state = current_code
@@ -320,11 +343,12 @@ class SwarmCoordinator:
 
             # Calculate final metrics
             session.metrics = self.change_tracker.calculate_metrics(
-                session.original_code,
-                session.refactored_code
+                session.original_code, session.refactored_code
             )
 
-            print(f"Refactoring completed after {len(session.evolution_history)} changes")
+            print(
+                f"Refactoring completed after {len(session.evolution_history)} changes"
+            )
 
         except Exception as e:
             session.status = RefactorStatus.FAILED
@@ -338,7 +362,7 @@ class SwarmCoordinator:
 
     def _apply_change(self, code: str, change: Change) -> str:
         """Apply a single change to code"""
-        lines = code.split('\n')
+        lines = code.split("\n")
 
         # Simple line replacement with bounds checking
         if 0 <= change.line_start < len(lines):
@@ -347,15 +371,21 @@ class SwarmCoordinator:
                 lines[change.line_start] = change.modified_code
             else:
                 # Log when change doesn't match expected original
-                print(f"Warning: Line {change.line_start} doesn't match expected original code")
+                print(
+                    f"Warning: Line {change.line_start} doesn't match expected original code"
+                )
                 print(f"  Expected: '{change.original_code.strip()}'")
                 print(f"  Actual: '{lines[change.line_start].strip()}'")
         else:
-            print(f"Warning: Line {change.line_start} out of range (max: {len(lines)-1})")
+            print(
+                f"Warning: Line {change.line_start} out of range (max: {len(lines)-1})"
+            )
 
-        return '\n'.join(lines)
+        return "\n".join(lines)
 
-    def apply_session_to_file(self, refactor_id: UUID, create_backup: bool = True) -> bool:
+    def apply_session_to_file(
+        self, refactor_id: UUID, create_backup: bool = True
+    ) -> bool:
         """Apply refactored code from session to the original file"""
         try:
             # Get the session
@@ -374,6 +404,7 @@ class SwarmCoordinator:
             # Create backup if requested
             if create_backup:
                 import shutil
+
                 backup_path = f"{target_path}.backup"
                 try:
                     shutil.copy2(target_path, backup_path)
@@ -381,7 +412,7 @@ class SwarmCoordinator:
                     print(f"Warning: Could not create backup: {e}")
 
             # Write refactored code to original file
-            with open(target_path, 'w', encoding='utf-8') as f:
+            with open(target_path, "w", encoding="utf-8") as f:
                 f.write(session.refactored_code)
 
             return True
@@ -399,8 +430,7 @@ class SwarmCoordinator:
                 return None
 
             return self.change_tracker.create_diff(
-                session.original_code,
-                session.refactored_code
+                session.original_code, session.refactored_code
             )
 
         except Exception:

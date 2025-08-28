@@ -3,9 +3,10 @@ Sample code for SNRE refactoring demonstration
 This file contains various code patterns that SNRE agents can optimize
 """
 
+
 # Security issues for SecurityEnforcer to detect
-password = os.environ.get("PASSWORD")
-api_key = os.environ.get("API_KEY")
+password = "hardcoded_secret_123"
+api_key = "sk-1234567890abcdef"
 
 def vulnerable_query(user_id):
     """SQL injection vulnerability"""
@@ -13,7 +14,7 @@ def vulnerable_query(user_id):
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
     # Vulnerable to SQL injection
-    cursor.execute("SELECT * FROM users WHERE id = ?" % user_id)
+    cursor.execute("SELECT * FROM users WHERE id = %s" % user_id)
     return cursor.fetchall()
 
 def unsafe_eval(user_input):
@@ -127,4 +128,4 @@ def performance_problems():
 
 if __name__ == "__main__":
     print("Sample code for SNRE refactoring")
-    print("Run: python main.py cli start --path examples/sample_refactor.py --agents security_enforcer,pattern_optimizer,loop_simplifier")
+    print("Run: snre start --path examples/sample_refactor.py --agents security_enforcer,pattern_optimizer,loop_simplifier")

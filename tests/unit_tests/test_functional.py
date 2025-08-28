@@ -75,8 +75,12 @@ class TestCoreComponents:
         self.coordinator = SwarmCoordinator(self.config)
 
         # Register test agents
-        self.coordinator.register_agent(PatternOptimizer("pattern_optimizer", self.config))
-        self.coordinator.register_agent(SecurityEnforcer("security_enforcer", self.config))
+        self.coordinator.register_agent(
+            PatternOptimizer("pattern_optimizer", self.config)
+        )
+        self.coordinator.register_agent(
+            SecurityEnforcer("security_enforcer", self.config)
+        )
 
     def test_consensus_engine(self):
         """Test consensus calculation"""
@@ -85,7 +89,7 @@ class TestCoreComponents:
         # Mock votes from agents
         votes = {
             "agent1": {"change_1": 0.8, "change_2": 0.6},
-            "agent2": {"change_1": 0.7, "change_2": 0.9}
+            "agent2": {"change_1": 0.7, "change_2": 0.9},
         }
 
         decision = engine.calculate_consensus(votes)
@@ -116,20 +120,21 @@ class TestCoreComponents:
     def test_file_refactoring_flow(self):
         """Test complete refactoring flow with temp file"""
         # Create temporary Python file
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
-            f.write("""
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+            f.write(
+                """
 password = "secret123"
 result = []
 for i in range(len(items)):
     result.append(items[i] * 2)
-""")
+"""
+            )
             temp_path = f.name
 
         try:
             # Start refactoring
             session_id = self.coordinator.start_refactor(
-                temp_path,
-                ["security_enforcer", "pattern_optimizer"]
+                temp_path, ["security_enforcer", "pattern_optimizer"]
             )
 
             # Check session was created

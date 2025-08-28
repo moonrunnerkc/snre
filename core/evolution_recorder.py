@@ -30,7 +30,7 @@ class EvolutionRecorder:
 
         # Load existing log or create new
         try:
-            with open(log_file, encoding='utf-8') as f:
+            with open(log_file, encoding="utf-8") as f:
                 log_data = json.load(f)
         except FileNotFoundError:
             log_data = {"session_id": str(session_id), "steps": []}
@@ -40,7 +40,7 @@ class EvolutionRecorder:
         log_data["steps"].append(step_data)
 
         # Write back to file
-        with open(log_file, 'w', encoding='utf-8') as f:
+        with open(log_file, "w", encoding="utf-8") as f:
             json.dump(log_data, f, indent=2, ensure_ascii=False)
 
     def create_snapshot(self, session_id: UUID, code: str, iteration: int) -> str:
@@ -53,12 +53,13 @@ class EvolutionRecorder:
             return ""
 
         snapshot_file = os.path.join(
-            self.snapshots_dir,
-            f"{session_id}_iter_{iteration}.py"
+            self.snapshots_dir, f"{session_id}_iter_{iteration}.py"
         )
 
-        with open(snapshot_file, 'w', encoding='utf-8') as f:
-            f.write(f"# SNRE Snapshot - Session: {session_id}, Iteration: {iteration}\n")
+        with open(snapshot_file, "w", encoding="utf-8") as f:
+            f.write(
+                f"# SNRE Snapshot - Session: {session_id}, Iteration: {iteration}\n"
+            )
             f.write(f"# Generated: {datetime.now().isoformat()}\n\n")
             f.write(code)
 
@@ -69,7 +70,7 @@ class EvolutionRecorder:
         log_file = os.path.join(self.logs_dir, f"{session_id}.json")
 
         try:
-            with open(log_file, encoding='utf-8') as f:
+            with open(log_file, encoding="utf-8") as f:
                 log_data = json.load(f)
 
             steps = []
@@ -105,8 +106,7 @@ class EvolutionRecorder:
 
         # Also limit total number of snapshots
         snapshot_files = [
-            f for f in os.listdir(self.snapshots_dir)
-            if f.endswith('.py')
+            f for f in os.listdir(self.snapshots_dir) if f.endswith(".py")
         ]
 
         if len(snapshot_files) > self.config.max_snapshots:
@@ -115,7 +115,7 @@ class EvolutionRecorder:
                 key=lambda f: os.path.getmtime(os.path.join(self.snapshots_dir, f))
             )
 
-            files_to_remove = snapshot_files[:-self.config.max_snapshots]
+            files_to_remove = snapshot_files[: -self.config.max_snapshots]
             for filename in files_to_remove:
                 try:
                     os.remove(os.path.join(self.snapshots_dir, filename))
@@ -131,7 +131,7 @@ class EvolutionRecorder:
             change_type=change.change_type,
             confidence=change.confidence,
             description=change.description,
-            code_diff=f"@@ -{change.line_start},{change.line_end} +{change.line_start},{change.line_end} @@\n-{change.original_code}\n+{change.modified_code}"
+            code_diff=f"@@ -{change.line_start},{change.line_end} +{change.line_start},{change.line_end} @@\n-{change.original_code}\n+{change.modified_code}",
         )
 
     def get_session_snapshots(self, session_id: UUID) -> list[str]:
@@ -143,7 +143,7 @@ class EvolutionRecorder:
         session_prefix = f"{session_id}_iter_"
 
         for filename in os.listdir(self.snapshots_dir):
-            if filename.startswith(session_prefix) and filename.endswith('.py'):
+            if filename.startswith(session_prefix) and filename.endswith(".py"):
                 session_snapshots.append(os.path.join(self.snapshots_dir, filename))
 
         # Sort by iteration number
@@ -155,8 +155,8 @@ class EvolutionRecorder:
         try:
             filename = os.path.basename(filepath)
             # Extract number between 'iter_' and '.py'
-            start = filename.find('iter_') + 5
-            end = filename.rfind('.py')
+            start = filename.find("iter_") + 5
+            end = filename.rfind(".py")
             return int(filename[start:end])
         except (ValueError, AttributeError):
             return 0

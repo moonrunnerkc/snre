@@ -7,15 +7,16 @@ name = "snre"
 version = "1.0.0"
 description = "Swarm Neural Refactoring Engine - Distributed agent-based code refactoring"
 authors = [
-    {name = "SNRE Development Team"}
+    { name = "Bradley R. Kinnard", email = "contact@aftermathtech.com" },
+    { name = "Aftermath Technologies Ltd." }
 ]
 readme = "README.md"
-license = {text = "MIT"}
+license = { text = "Apache-2.0" }
 requires-python = ">=3.9"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
@@ -49,10 +50,10 @@ dev = [
 snre = "main:main"
 
 [project.urls]
-Homepage = "https://github.com/your-org/snre"
+GitHub = "https://github.com/moonrunnerkc/snre"
 Documentation = "https://snre.readthedocs.io/"
-Repository = "https://github.com/your-org/snre.git"
-"Bug Tracker" = "https://github.com/your-org/snre/issues"
+Repository = "https://github.com/moonrunnerkc/snre.git"
+"Bug Tracker" = "https://github.com/moonrunnerkc/snre/issues"
 
 [tool.ruff]
 target-version = "py39"
@@ -130,14 +131,3 @@ exclude_lines = [
     "class .*\\bProtocol\\):",
     "@(abc\\.)?abstractmethod",
 ]
-
-[project]
-name = "snre"
-version = "1.0.0"
-description = "Swarm Neural Refactoring Engine - Distributed agent-based code refactoring"
-authors = [
-    { name = "Bradley R. Kinnard", email = "contact@aftermathtech.com" },
-    { name = "Aftermath Technologies Ltd." }
-]
-license = { text = "Apache-2.0" }
-urls = { "GitHub" = "https://github.com/moonrunnerkc/snre" }

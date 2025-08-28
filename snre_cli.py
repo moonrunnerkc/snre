@@ -9,6 +9,7 @@ import sys
 # Add the current directory to Python path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+
 def main():
     """CLI entry point for SNRE"""
     # Import here to avoid circular imports

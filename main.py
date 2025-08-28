@@ -60,10 +60,11 @@ class SNREApplication:
         """Load configuration from file"""
         try:
             with open(config_path) as f:
-                if config_path.endswith('.yaml') or config_path.endswith('.yml'):
+                if config_path.endswith(".yaml") or config_path.endswith(".yml"):
                     config_data = yaml.safe_load(f)
                 else:
                     import json
+
                     config_data = json.load(f)
 
             # Update config with loaded values
@@ -97,7 +98,7 @@ class SNREApplication:
         agents = [
             PatternOptimizer("pattern_optimizer", self.config),
             SecurityEnforcer("security_enforcer", self.config),
-            LoopSimplifier("loop_simplifier", self.config)
+            LoopSimplifier("loop_simplifier", self.config),
         ]
 
         for agent in agents:
@@ -114,10 +115,12 @@ class SNREApplication:
 
                 # Update agent configurations based on profiles
                 for agent_id, agent in self.coordinator.agents.items():
-                    if agent_id in profiles.get('agents', {}):
-                        profile = profiles['agents'][agent_id]
-                        agent._priority = profile.get('priority', agent._priority)
-                        agent._confidence_threshold = profile.get('confidence_threshold', agent._confidence_threshold)
+                    if agent_id in profiles.get("agents", {}):
+                        profile = profiles["agents"][agent_id]
+                        agent._priority = profile.get("priority", agent._priority)
+                        agent._confidence_threshold = profile.get(
+                            "confidence_threshold", agent._confidence_threshold
+                        )
 
             except Exception as e:
                 print(f"Warning: Could not load agent profiles: {str(e)}")
@@ -126,7 +129,7 @@ class SNREApplication:
 def main():
     """Main entry point for CLI commands"""
     # Check if this is the old-style mode call (cli/api) or direct command
-    if len(sys.argv) >= 2 and sys.argv[1] in ['cli', 'api']:
+    if len(sys.argv) >= 2 and sys.argv[1] in ["cli", "api"]:
         # Old-style mode-based calling
         mode = sys.argv[1]
 

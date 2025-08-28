@@ -13,47 +13,61 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 def create_parser():
     """Create argument parser for SNRE CLI"""
-    parser = argparse.ArgumentParser(description="SNRE - Swarm Neural Refactoring Engine")
-    subparsers = parser.add_subparsers(dest='command', help='Available commands')
+    parser = argparse.ArgumentParser(
+        description="SNRE - Swarm Neural Refactoring Engine"
+    )
+    subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
     # Start command
-    start_parser = subparsers.add_parser('start', help='Start refactoring session')
-    start_parser.add_argument('--path', required=True, help='Target code path')
-    start_parser.add_argument('--agents', help='Comma-separated list of agents')
-    start_parser.add_argument('--config', help='Custom configuration file')
-    start_parser.add_argument('--verbose', action='store_true', help='Verbose output')
+    start_parser = subparsers.add_parser("start", help="Start refactoring session")
+    start_parser.add_argument("--path", required=True, help="Target code path")
+    start_parser.add_argument("--agents", help="Comma-separated list of agents")
+    start_parser.add_argument("--config", help="Custom configuration file")
+    start_parser.add_argument("--verbose", action="store_true", help="Verbose output")
 
     # Status command
-    status_parser = subparsers.add_parser('status', help='Get session status')
-    status_parser.add_argument('refactor_id', help='Refactor session ID')
+    status_parser = subparsers.add_parser("status", help="Get session status")
+    status_parser.add_argument("refactor_id", help="Refactor session ID")
 
     # Result command
-    result_parser = subparsers.add_parser('result', help='Get session results')
-    result_parser.add_argument('refactor_id', help='Refactor session ID')
-    result_parser.add_argument('--output', help='Output file for results')
+    result_parser = subparsers.add_parser("result", help="Get session results")
+    result_parser.add_argument("refactor_id", help="Refactor session ID")
+    result_parser.add_argument("--output", help="Output file for results")
 
     # Show command
-    show_parser = subparsers.add_parser('show', help='Display refactored code')
-    show_parser.add_argument('refactor_id', help='Refactor session ID')
-    show_parser.add_argument('--diff', action='store_true', help='Show differences between original and refactored code')
-    show_parser.add_argument('--line-numbers', action='store_true', help='Show line numbers')
+    show_parser = subparsers.add_parser("show", help="Display refactored code")
+    show_parser.add_argument("refactor_id", help="Refactor session ID")
+    show_parser.add_argument(
+        "--diff",
+        action="store_true",
+        help="Show differences between original and refactored code",
+    )
+    show_parser.add_argument(
+        "--line-numbers", action="store_true", help="Show line numbers"
+    )
 
     # Apply command
-    apply_parser = subparsers.add_parser('apply', help='Apply refactored code to original file')
-    apply_parser.add_argument('refactor_id', help='Refactor session ID')
-    apply_parser.add_argument('--no-backup', action='store_true', help='Do not create backup of original file')
-    apply_parser.add_argument('--force', action='store_true', help='Apply changes even if file was modified')
+    apply_parser = subparsers.add_parser(
+        "apply", help="Apply refactored code to original file"
+    )
+    apply_parser.add_argument("refactor_id", help="Refactor session ID")
+    apply_parser.add_argument(
+        "--no-backup", action="store_true", help="Do not create backup of original file"
+    )
+    apply_parser.add_argument(
+        "--force", action="store_true", help="Apply changes even if file was modified"
+    )
 
     # List command
-    subparsers.add_parser('list', help='List active sessions')
+    subparsers.add_parser("list", help="List active sessions")
 
     # Cancel command
-    cancel_parser = subparsers.add_parser('cancel', help='Cancel session')
-    cancel_parser.add_argument('refactor_id', help='Refactor session ID')
+    cancel_parser = subparsers.add_parser("cancel", help="Cancel session")
+    cancel_parser.add_argument("refactor_id", help="Refactor session ID")
 
     # Validate command
-    validate_parser = subparsers.add_parser('validate', help='Validate code')
-    validate_parser.add_argument('--path', required=True, help='Target code path')
+    validate_parser = subparsers.add_parser("validate", help="Validate code")
+    validate_parser.add_argument("--path", required=True, help="Target code path")
 
     return parser
 
@@ -90,7 +104,7 @@ def handle_start_command(args):
     """Handle start refactoring command"""
     coordinator, config = initialize_snre()
 
-    agent_set = args.agents.split(',') if args.agents else ['security_enforcer']
+    agent_set = args.agents.split(",") if args.agents else ["security_enforcer"]
 
     try:
         session_id = coordinator.start_refactor(args.path, agent_set)
@@ -116,6 +130,7 @@ def handle_validate_command(args):
 
         # Basic syntax validation
         import ast
+
         try:
             ast.parse(code)
             print("Syntax validation: PASSED")
@@ -136,6 +151,7 @@ def handle_status_command(args):
 
     try:
         from uuid import UUID
+
         session_id = UUID(args.refactor_id)
         status = coordinator.get_session_status(session_id)
 
@@ -158,6 +174,7 @@ def handle_result_command(args):
 
     try:
         from uuid import UUID
+
         session_id = UUID(args.refactor_id)
         session = coordinator.get_session_result(session_id)
 
@@ -179,10 +196,12 @@ def handle_result_command(args):
         if session.evolution_history:
             print("Changes made:")
             for step in session.evolution_history:
-                print(f"  - {step.agent}: {step.description} (confidence: {step.confidence:.2f})")
+                print(
+                    f"  - {step.agent}: {step.description} (confidence: {step.confidence:.2f})"
+                )
 
         if args.output:
-            with open(args.output, 'w') as f:
+            with open(args.output, "w") as f:
                 f.write(session.refactored_code or session.original_code)
             print(f"Refactored code written to: {args.output}")
 
@@ -200,6 +219,7 @@ def handle_show_command(args):
 
     try:
         from uuid import UUID
+
         session_id = UUID(args.refactor_id)
         session = coordinator.get_session_result(session_id)
 
@@ -212,6 +232,7 @@ def handle_show_command(args):
         if args.diff:
             # Show diff between original and refactored
             from core.change_tracker import ChangeTracker
+
             tracker = ChangeTracker(config)
             diff = tracker.create_diff(session.original_code, refactored_code)
 
@@ -229,7 +250,7 @@ def handle_show_command(args):
             print()
 
             if args.line_numbers:
-                lines = refactored_code.split('\n')
+                lines = refactored_code.split("\n")
                 for i, line in enumerate(lines, 1):
                     print(f"{i:4d}: {line}")
             else:
@@ -249,11 +270,14 @@ def handle_apply_command(args):
 
     try:
         from uuid import UUID
+
         session_id = UUID(args.refactor_id)
         session = coordinator.get_session_result(session_id)
 
         if session.status.value != "completed":
-            print(f"Cannot apply: Session not completed. Status: {session.status.value}")
+            print(
+                f"Cannot apply: Session not completed. Status: {session.status.value}"
+            )
             return
 
         if not session.refactored_code:
@@ -262,13 +286,17 @@ def handle_apply_command(args):
 
         # Check if file has been modified since refactoring started
         try:
-            with open(session.target_path, encoding='utf-8') as f:
+            with open(session.target_path, encoding="utf-8") as f:
                 current_content = f.read()
 
             if current_content != session.original_code and not args.force:
-                print(f"WARNING: {session.target_path} has been modified since refactoring.")
+                print(
+                    f"WARNING: {session.target_path} has been modified since refactoring."
+                )
                 print("The original code no longer matches the file content.")
-                print("Use --force to apply changes anyway, or start a new refactoring session.")
+                print(
+                    "Use --force to apply changes anyway, or start a new refactoring session."
+                )
                 return
 
         except FileNotFoundError:
@@ -327,6 +355,7 @@ def handle_cancel_command(args):
 
     try:
         from uuid import UUID
+
         session_id = UUID(args.refactor_id)
         success = coordinator.cancel_session(session_id)
 
@@ -355,31 +384,34 @@ def main():
         return
 
     try:
-        if args.command == 'start':
+        if args.command == "start":
             handle_start_command(args)
-        elif args.command == 'validate':
+        elif args.command == "validate":
             handle_validate_command(args)
-        elif args.command == 'status':
+        elif args.command == "status":
             handle_status_command(args)
-        elif args.command == 'result':
+        elif args.command == "result":
             handle_result_command(args)
-        elif args.command == 'show':
+        elif args.command == "show":
             handle_show_command(args)
-        elif args.command == 'apply':
+        elif args.command == "apply":
             handle_apply_command(args)
-        elif args.command == 'list':
+        elif args.command == "list":
             handle_list_command(args)
-        elif args.command == 'cancel':
+        elif args.command == "cancel":
             handle_cancel_command(args)
         else:
             print(f"Command '{args.command}' not implemented")
-            print("Available commands: start, validate, status, result, show, apply, list, cancel")
+            print(
+                "Available commands: start, validate, status, result, show, apply, list, cancel"
+            )
 
     except KeyboardInterrupt:
         print("\nShutdown requested...")
     except Exception as e:
         print(f"Unexpected error: {str(e)}")
         import traceback
+
         traceback.print_exc()
         sys.exit(1)
 

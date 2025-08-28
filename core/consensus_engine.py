@@ -13,8 +13,9 @@ class ConsensusEngine:
     def __init__(self, config: Config):
         self.config = config
 
-    def collect_votes(self, agents: dict[str, BaseAgent],
-                     changes: list[Change]) -> dict[str, dict[str, float]]:
+    def collect_votes(
+        self, agents: dict[str, BaseAgent], changes: list[Change]
+    ) -> dict[str, dict[str, float]]:
         """Collect votes from all agents on proposed changes"""
         all_votes = {}
 
@@ -24,13 +25,13 @@ class ConsensusEngine:
                 all_votes[agent_id] = agent_votes
             except Exception:
                 # Agent failed to vote, assign neutral scores
-                all_votes[agent_id] = {
-                    f"change_{i}": 0.5 for i in range(len(changes))
-                }
+                all_votes[agent_id] = {f"change_{i}": 0.5 for i in range(len(changes))}
 
         return all_votes
 
-    def calculate_consensus(self, votes: dict[str, dict[str, float]]) -> ConsensusDecision:
+    def calculate_consensus(
+        self, votes: dict[str, dict[str, float]]
+    ) -> ConsensusDecision:
         """Calculate consensus from agent votes"""
         if not votes:
             return ConsensusDecision(
@@ -38,7 +39,7 @@ class ConsensusEngine:
                 decision="no_consensus",
                 votes={},
                 winning_agent="none",
-                confidence=0.0
+                confidence=0.0,
             )
 
         # Calculate weighted average scores
@@ -64,7 +65,9 @@ class ConsensusEngine:
             confidence = 0.0
         else:
             # Average all vote scores
-            avg_score = sum(sum(scores) for scores in vote_scores.values()) / len(vote_scores)
+            avg_score = sum(sum(scores) for scores in vote_scores.values()) / len(
+                vote_scores
+            )
 
             if avg_score >= self.config.consensus_threshold:
                 decision = "accept_changes"
@@ -72,7 +75,9 @@ class ConsensusEngine:
                 agent_averages = {}
                 for agent_id in votes:
                     if votes[agent_id]:
-                        agent_averages[agent_id] = sum(votes[agent_id].values()) / len(votes[agent_id])
+                        agent_averages[agent_id] = sum(votes[agent_id].values()) / len(
+                            votes[agent_id]
+                        )
                     else:
                         agent_averages[agent_id] = 0.0
 
@@ -88,11 +93,12 @@ class ConsensusEngine:
             decision=decision,
             votes=votes,
             winning_agent=winning_agent,
-            confidence=confidence
+            confidence=confidence,
         )
 
-    def apply_overrides(self, decision: ConsensusDecision,
-                       priority_agents: list[str]) -> ConsensusDecision:
+    def apply_overrides(
+        self, decision: ConsensusDecision, priority_agents: list[str]
+    ) -> ConsensusDecision:
         """Apply priority agent overrides"""
         if not priority_agents:
             return decision
@@ -101,7 +107,9 @@ class ConsensusEngine:
         for agent_id in priority_agents:
             if agent_id in decision.votes:
                 agent_votes = decision.votes[agent_id]
-                avg_vote = sum(agent_votes.values()) / len(agent_votes) if agent_votes else 0.0
+                avg_vote = (
+                    sum(agent_votes.values()) / len(agent_votes) if agent_votes else 0.0
+                )
 
                 # Priority agent can override with strong confidence
                 if avg_vote > 0.9:

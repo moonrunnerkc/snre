@@ -3,10 +3,9 @@ Base agent implementation for SNRE
 """
 
 from abc import ABC, abstractmethod
-
 import libcst as cst
 
-from contracts import AgentAnalysis, BaseAgent, Change, Config
+from contracts import AgentAnalysis, Change, Config, SNRESyntaxError
 
 
 class BaseAgent(ABC):
@@ -51,7 +50,6 @@ class BaseAgent(ABC):
         try:
             return cst.parse_module(code)
         except Exception as e:
-            from contracts import SNRESyntaxError
             raise SNRESyntaxError(f"Failed to parse code: {str(e)}")
 
     def _calculate_complexity(self, tree: cst.Module) -> float:
