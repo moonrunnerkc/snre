@@ -4,27 +4,15 @@ Contract compliance tests for SNRE.
 Behavioral assertions only -- no hasattr, no try/except ImportError.
 """
 
-import pytest
 from datetime import datetime
 from uuid import uuid4
+
+import pytest
 
 from agents.base_agent import BaseAgent
 from agents.loop_simplifier import LoopSimplifier
 from agents.pattern_optimizer import PatternOptimizer
 from agents.security_enforcer import SecurityEnforcer
-from snre.errors import AgentNotFoundError
-from snre.models.profiles import AgentProfile
-from snre.models.changes import Change
-from snre.models.enums import ChangeType
-from snre.models.config import Config
-from snre.errors import ConsensusFailedError
-from snre.errors import InvalidPathError
-from snre.errors import PermissionDeniedError
-from snre.models.session import RefactorSession
-from snre.models.enums import RefactorStatus
-from snre.errors import SessionNotFoundError
-from snre.errors import SNREError
-from snre.errors import TimeoutError
 from core.change_tracker import ChangeTracker
 from core.consensus_engine import ConsensusEngine
 from core.evolution_recorder import EvolutionRecorder
@@ -32,6 +20,19 @@ from core.swarm_coordinator import SwarmCoordinator
 from interface.api import APIInterface
 from interface.cli import CLIInterface
 from interface.integration_hook import IntegrationHook
+from snre.errors import AgentNotFoundError
+from snre.errors import ConsensusFailedError
+from snre.errors import InvalidPathError
+from snre.errors import PermissionDeniedError
+from snre.errors import SessionNotFoundError
+from snre.errors import SNREError
+from snre.errors import TimeoutError
+from snre.models.changes import Change
+from snre.models.config import Config
+from snre.models.enums import ChangeType
+from snre.models.enums import RefactorStatus
+from snre.models.profiles import AgentProfile
+from snre.models.session import RefactorSession
 
 
 class TestConfigContract:

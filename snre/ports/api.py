@@ -8,18 +8,19 @@ from datetime import datetime
 from typing import Any
 from uuid import UUID
 
+import structlog
 from fastapi import FastAPI
 from fastapi import HTTPException
 from fastapi.responses import PlainTextResponse
+from prometheus_client import CONTENT_TYPE_LATEST
+from prometheus_client import generate_latest
 from pydantic import BaseModel
 from pydantic import Field
-from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
 
 from snre.errors import AgentNotFoundError
 from snre.errors import InvalidPathError
 from snre.errors import SessionNotFoundError
 
-import structlog
 logger = structlog.get_logger(__name__)
 
 

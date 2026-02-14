@@ -10,11 +10,12 @@ from datetime import datetime
 from datetime import timedelta
 from uuid import UUID
 
+import structlog
+
 from snre.models.changes import Change
 from snre.models.config import SNREConfig
 from snre.models.session import EvolutionStep
 
-import structlog
 logger = structlog.get_logger(__name__)
 
 

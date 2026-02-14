@@ -16,6 +16,11 @@ from typing import Callable
 from typing import Optional
 from uuid import UUID
 
+import structlog
+from prometheus_client import Counter
+from prometheus_client import Gauge
+from prometheus_client import Histogram
+
 from snre.adapters.repository import SessionRepository
 from snre.agents.protocol import RefactoringAgent
 from snre.agents.registry import AgentRegistry
@@ -30,15 +35,11 @@ from snre.models.enums import RefactorStatus
 from snre.models.session import EvolutionStep
 from snre.models.session import RefactorSession
 
-import structlog
 logger = structlog.get_logger(__name__)
 
 # re-export for bind/unbind in async loop
 _bind_contextvars = structlog.contextvars.bind_contextvars
 _unbind_contextvars = structlog.contextvars.unbind_contextvars
-
-# prometheus metrics
-from prometheus_client import Counter, Gauge, Histogram
 
 REFACTOR_SESSIONS_TOTAL = Counter(
     "snre_refactor_sessions_total", "total sessions started"
@@ -278,10 +279,12 @@ class SwarmCoordinator:
                     consecutive_stalls = 0
 
                 # consensus vote (agents vote in parallel too)
-                async def _run_vote(aid: str) -> tuple[str, dict[str, float]]:
+                _meaningful = meaningful  # bind loop var for closure
+
+                async def _run_vote(aid: str, changes: list[Change] = _meaningful) -> tuple[str, dict[str, float]]:
                     async with sem:
                         agent = self.registry.get(aid)
-                        votes = await asyncio.to_thread(agent.vote, meaningful)
+                        votes = await asyncio.to_thread(agent.vote, changes)
                         return aid, votes
 
                 vote_tasks = [_run_vote(aid) for aid in session.agent_set]

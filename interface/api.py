@@ -11,9 +11,9 @@ from flask import jsonify
 from flask import request
 
 from snre.errors import AgentNotFoundError
-from snre.models.config import Config
 from snre.errors import InvalidPathError
 from snre.errors import SessionNotFoundError
+from snre.models.config import Config
 
 
 class APIInterface:

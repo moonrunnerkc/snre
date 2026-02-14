@@ -5,19 +5,20 @@ Supports env overrides (SNRE_ prefix), YAML file loading, and .env files.
 """
 
 from pathlib import Path
-from typing import Any, Tuple, Type
-
-from pydantic import Field, ValidationError
-from pydantic_settings import BaseSettings, PydanticBaseSettingsSource
-from pydantic_settings import SettingsConfigDict
+from typing import Any
 
 import yaml
+from pydantic import Field
+from pydantic import ValidationError
+from pydantic_settings import BaseSettings
+from pydantic_settings import PydanticBaseSettingsSource
+from pydantic_settings import SettingsConfigDict
 
 
 class _YamlSettingsSource(PydanticBaseSettingsSource):
     """Load config from a YAML file if it exists."""
 
-    def __init__(self, settings_cls: Type[BaseSettings]) -> None:
+    def __init__(self, settings_cls: type[BaseSettings]) -> None:
         super().__init__(settings_cls)
         self._yaml_data: dict[str, Any] = {}
         yaml_path = Path("config/settings.yaml")
@@ -30,7 +31,7 @@ class _YamlSettingsSource(PydanticBaseSettingsSource):
 
     def get_field_value(
         self, field: Any, field_name: str
-    ) -> Tuple[Any, str, bool]:
+    ) -> tuple[Any, str, bool]:
         val = self._yaml_data.get(field_name)
         return val, field_name, val is not None
 
@@ -84,12 +85,12 @@ class SNREConfig(BaseSettings):
     @classmethod
     def settings_customise_sources(
         cls,
-        settings_cls: Type[BaseSettings],
+        settings_cls: type[BaseSettings],
         init_settings: PydanticBaseSettingsSource,
         env_settings: PydanticBaseSettingsSource,
         dotenv_settings: PydanticBaseSettingsSource,
         file_secret_settings: PydanticBaseSettingsSource,
-    ) -> Tuple[PydanticBaseSettingsSource, ...]:
+    ) -> tuple[PydanticBaseSettingsSource, ...]:
         """Priority: init kwargs > env vars > .env file > YAML > defaults."""
         return (
             init_settings,

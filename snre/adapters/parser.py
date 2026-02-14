@@ -7,6 +7,7 @@ Isolates the libcst dependency so agents can import without requiring it at modu
 from typing import Any
 
 import structlog
+
 logger = structlog.get_logger(__name__)
 
 # lazy import to avoid hard dep at module load

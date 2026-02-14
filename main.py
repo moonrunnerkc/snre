@@ -11,7 +11,6 @@ import yaml
 from agents.loop_simplifier import LoopSimplifier
 from agents.pattern_optimizer import PatternOptimizer
 from agents.security_enforcer import SecurityEnforcer
-from snre.models.config import Config
 from core.change_tracker import ChangeTracker
 from core.consensus_engine import ConsensusEngine
 from core.evolution_recorder import EvolutionRecorder
@@ -19,6 +18,7 @@ from core.swarm_coordinator import SwarmCoordinator
 from interface.api import APIInterface
 from interface.cli import CLIInterface
 from interface.integration_hook import IntegrationHook
+from snre.models.config import Config
 
 
 class SNREApplication:

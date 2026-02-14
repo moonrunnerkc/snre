@@ -7,20 +7,18 @@ Tests actual behavior -- no try/except ImportError, no skipif import guards.
 import os
 import tempfile
 
-import pytest
-
 from agents.loop_simplifier import LoopSimplifier
 from agents.pattern_optimizer import PatternOptimizer
 from agents.security_enforcer import SecurityEnforcer
-from snre.models.changes import AgentAnalysis
-from snre.models.changes import Change
-from snre.models.enums import ChangeType
-from snre.models.config import Config
-from snre.models.session import RefactorMetrics
 from core.change_tracker import ChangeTracker
 from core.consensus_engine import ConsensusEngine
 from core.evolution_recorder import EvolutionRecorder
 from core.swarm_coordinator import SwarmCoordinator
+from snre.models.changes import AgentAnalysis
+from snre.models.changes import Change
+from snre.models.config import Config
+from snre.models.enums import ChangeType
+from snre.models.session import RefactorMetrics
 
 
 class TestAgentFunctionality:
@@ -214,7 +212,8 @@ class TestIntegration:
         assert cli is not None
 
     def test_api_instantiation(self):
-        from interface.api import APIInterface, create_app
+        from interface.api import APIInterface
+        from interface.api import create_app
 
         config = Config()
         coordinator = SwarmCoordinator(config)

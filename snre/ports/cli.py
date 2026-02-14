@@ -9,10 +9,10 @@ import sys
 from uuid import UUID
 
 import click
+import structlog
 
 from snre.errors import SessionNotFoundError
 
-import structlog
 logger = structlog.get_logger(__name__)
 
 

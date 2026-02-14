@@ -9,8 +9,8 @@ from typing import Any
 from typing import Optional
 from uuid import UUID
 
-from snre.models.config import Config
 from snre.errors import SessionNotFoundError
+from snre.models.config import Config
 
 
 class CLIInterface:

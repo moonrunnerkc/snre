@@ -10,12 +10,12 @@ from pathlib import Path
 from typing import Protocol
 from uuid import UUID
 
+import structlog
 from filelock import FileLock
 
 from snre.errors import SessionNotFoundError
 from snre.models.session import RefactorSession
 
-import structlog
 logger = structlog.get_logger(__name__)
 
 
