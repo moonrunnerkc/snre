@@ -80,9 +80,7 @@ class ChangeTracker:
 
     # ---- internals ----
 
-    def _count_changed_lines(
-        self, original: list[str], modified: list[str]
-    ) -> int:
+    def _count_changed_lines(self, original: list[str], modified: list[str]) -> int:
         differ = difflib.Differ()
         diff = list(differ.compare(original, modified))
         return sum(1 for line in diff if line.startswith("+ ") or line.startswith("- "))

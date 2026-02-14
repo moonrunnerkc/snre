@@ -264,7 +264,10 @@ class SwarmCoordinator:
 
                 # Check for convergence - no meaningful changes suggested
                 if not all_changes:
-                    logger.info("convergence reached: no more changes suggested at iteration %d", iteration)
+                    logger.info(
+                        "convergence reached: no more changes suggested at iteration %d",
+                        iteration,
+                    )
                     break
 
                 # Filter out changes that wouldn't actually modify the code
@@ -279,11 +282,17 @@ class SwarmCoordinator:
 
                 if not meaningful_changes:
                     consecutive_no_change_iterations += 1
-                    logger.debug("no meaningful changes at iteration %d (consecutive: %d)", iteration, consecutive_no_change_iterations)
+                    logger.debug(
+                        "no meaningful changes at iteration %d (consecutive: %d)",
+                        iteration,
+                        consecutive_no_change_iterations,
+                    )
 
                     # Exit if we've had several iterations with no meaningful changes
                     if consecutive_no_change_iterations >= 3:
-                        logger.info("convergence reached: no meaningful changes for 3 consecutive iterations")
+                        logger.info(
+                            "convergence reached: no meaningful changes for 3 consecutive iterations"
+                        )
                         break
                     continue
                 else:
@@ -315,17 +324,29 @@ class SwarmCoordinator:
                             )
                             session.evolution_history.append(step)
 
-                            logger.info("applied change at iteration %d: %s", iteration, best_change.description)
+                            logger.info(
+                                "applied change at iteration %d: %s",
+                                iteration,
+                                best_change.description,
+                            )
                         else:
-                            logger.debug("change did not modify code at iteration %d", iteration)
+                            logger.debug(
+                                "change did not modify code at iteration %d", iteration
+                            )
                     else:
-                        logger.debug("best change confidence (%.2f) below threshold (%.2f)", best_change.confidence, self.config.consensus_threshold)
+                        logger.debug(
+                            "best change confidence (%.2f) below threshold (%.2f)",
+                            best_change.confidence,
+                            self.config.consensus_threshold,
+                        )
 
                 # Check if code hasn't changed for several iterations
                 if current_code == last_code_state:
                     consecutive_no_change_iterations += 1
                     if consecutive_no_change_iterations >= 3:
-                        logger.info("convergence reached: code unchanged for 3 consecutive iterations")
+                        logger.info(
+                            "convergence reached: code unchanged for 3 consecutive iterations"
+                        )
                         break
                 else:
                     last_code_state = current_code
@@ -341,7 +362,9 @@ class SwarmCoordinator:
                 session.original_code, session.refactored_code
             )
 
-            logger.info("refactoring completed after %d changes", len(session.evolution_history))
+            logger.info(
+                "refactoring completed after %d changes", len(session.evolution_history)
+            )
 
         except Exception as e:
             session.status = RefactorStatus.FAILED
@@ -365,10 +388,14 @@ class SwarmCoordinator:
             else:
                 logger.warning(
                     "line %d doesn't match expected original, expected: '%s', actual: '%s'",
-                    change.line_start, change.original_code.strip(), lines[change.line_start].strip(),
+                    change.line_start,
+                    change.original_code.strip(),
+                    lines[change.line_start].strip(),
                 )
         else:
-            logger.warning("line %d out of range (max: %d)", change.line_start, len(lines) - 1)
+            logger.warning(
+                "line %d out of range (max: %d)", change.line_start, len(lines) - 1
+            )
 
         return "\n".join(lines)
 
@@ -381,7 +408,9 @@ class SwarmCoordinator:
             session = self.get_session_result(refactor_id)
 
             if session.status != RefactorStatus.COMPLETED:
-                logger.warning("cannot apply: session status is %s", session.status.value)
+                logger.warning(
+                    "cannot apply: session status is %s", session.status.value
+                )
                 return False
 
             if not session.refactored_code:

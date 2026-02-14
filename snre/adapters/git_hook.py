@@ -39,11 +39,15 @@ class GitHook:
         try:
             subprocess.run(
                 ["git", "-C", repo_path, "add", "-A"],
-                check=True, capture_output=True, text=True,
+                check=True,
+                capture_output=True,
+                text=True,
             )
             subprocess.run(
                 ["git", "-C", repo_path, "commit", "-m", message],
-                check=True, capture_output=True, text=True,
+                check=True,
+                capture_output=True,
+                text=True,
             )
             logger.info("git.committed", message=message)
             return True
@@ -59,7 +63,9 @@ class GitHook:
 
         pre_commit = os.path.join(hooks_dir, "pre-commit")
         with open(pre_commit, "w") as fh:
-            fh.write("#!/bin/sh\n# SNRE pre-commit hook\npython -m snre validate --path \"$@\"\n")
+            fh.write(
+                '#!/bin/sh\n# SNRE pre-commit hook\npython -m snre validate --path "$@"\n'
+            )
         os.chmod(pre_commit, 0o755)
 
         return True

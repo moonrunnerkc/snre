@@ -56,7 +56,9 @@ class EvolutionRecorder:
             self.snapshots_dir, f"{session_id}_iter_{iteration}.py"
         )
         with open(snapshot_file, "w", encoding="utf-8") as fh:
-            fh.write(f"# SNRE Snapshot - Session: {session_id}, Iteration: {iteration}\n")
+            fh.write(
+                f"# SNRE Snapshot - Session: {session_id}, Iteration: {iteration}\n"
+            )
             fh.write(f"# Generated: {datetime.now().isoformat()}\n\n")
             fh.write(code)
         return snapshot_file

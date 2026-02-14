@@ -47,11 +47,11 @@ def inefficient_function():
         config = Config()
         agent = SecurityEnforcer("security_enforcer", config)
 
-        test_code = '''
+        test_code = """
 password = "hardcoded_secret_123"
 def vulnerable_query(user_id):
     cursor.execute("SELECT * FROM users WHERE id = %s" % user_id)
-        '''
+        """
 
         analysis = agent.analyze(test_code)
         assert isinstance(analysis, AgentAnalysis)
@@ -117,7 +117,10 @@ for i in range(len(items)):
         changes = agent.suggest_changes(code)
         assert isinstance(changes, list)
         if changes:
-            assert "enumerate" in changes[0].modified_code or "optimization" in changes[0].description.lower()
+            assert (
+                "enumerate" in changes[0].modified_code
+                or "optimization" in changes[0].description.lower()
+            )
 
 
 class TestCoreComponents:

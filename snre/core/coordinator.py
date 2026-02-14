@@ -45,15 +45,12 @@ REFACTOR_SESSIONS_TOTAL = Counter(
     "snre_refactor_sessions_total", "total sessions started"
 )
 AGENT_LATENCY = Histogram(
-    "snre_agent_latency_seconds", "agent execution time",
+    "snre_agent_latency_seconds",
+    "agent execution time",
     ["agent_id"],
 )
-ACTIVE_SESSIONS = Gauge(
-    "snre_active_sessions", "currently active sessions"
-)
-CONSENSUS_ROUNDS = Counter(
-    "snre_consensus_rounds_total", "total consensus rounds"
-)
+ACTIVE_SESSIONS = Gauge("snre_active_sessions", "currently active sessions")
+CONSENSUS_ROUNDS = Counter("snre_consensus_rounds_total", "total consensus rounds")
 
 
 class SwarmCoordinator:
@@ -65,9 +62,7 @@ class SwarmCoordinator:
         registry: AgentRegistry,
         repository: SessionRepository,
         tracker: ChangeTracker,
-        consensus_fn: Callable[
-            [dict[str, dict[str, float]], float], ConsensusDecision
-        ],
+        consensus_fn: Callable[[dict[str, dict[str, float]], float], ConsensusDecision],
         on_step_complete: Callable[[EvolutionStep], None] | None = None,
     ) -> None:
         self.config = config
@@ -236,6 +231,7 @@ class SwarmCoordinator:
             async with sem:
                 agent = self.registry.get(agent_id)
                 import time
+
                 t0 = time.monotonic()
                 result = await asyncio.to_thread(agent.suggest_changes, code)
                 AGENT_LATENCY.labels(agent_id=agent_id).observe(time.monotonic() - t0)
@@ -247,21 +243,16 @@ class SwarmCoordinator:
             last_snapshot = current_code
 
             for iteration in range(self.config.max_iterations):
-                session.progress = int(
-                    (iteration / self.config.max_iterations) * 100
-                )
+                session.progress = int((iteration / self.config.max_iterations) * 100)
                 if iteration % 2 == 0:
                     self.repository.save(session)
 
                 # gather suggestions from all agents in parallel
                 tasks = [
-                    _run_agent_suggest(aid, current_code)
-                    for aid in session.agent_set
+                    _run_agent_suggest(aid, current_code) for aid in session.agent_set
                 ]
                 results = await asyncio.gather(*tasks)
-                all_changes: list[Change] = [
-                    c for batch in results for c in batch
-                ]
+                all_changes: list[Change] = [c for batch in results for c in batch]
 
                 if not all_changes:
                     logger.info("convergence.no_changes", iteration=iteration)
@@ -281,7 +272,9 @@ class SwarmCoordinator:
                 # consensus vote (agents vote in parallel too)
                 _meaningful = meaningful  # bind loop var for closure
 
-                async def _run_vote(aid: str, changes: list[Change] = _meaningful) -> tuple[str, dict[str, float]]:
+                async def _run_vote(
+                    aid: str, changes: list[Change] = _meaningful
+                ) -> tuple[str, dict[str, float]]:
                     async with sem:
                         agent = self.registry.get(aid)
                         votes = await asyncio.to_thread(agent.vote, changes)
@@ -308,9 +301,7 @@ class SwarmCoordinator:
                             change_type=best.change_type,
                             confidence=best.confidence,
                             description=best.description,
-                            code_diff=(
-                                f"-{best.original_code}\n+{best.modified_code}"
-                            ),
+                            code_diff=(f"-{best.original_code}\n+{best.modified_code}"),
                         )
                         session.evolution_history.append(step)
                         self._on_step_complete(step)

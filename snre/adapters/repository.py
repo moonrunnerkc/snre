@@ -22,13 +22,17 @@ logger = structlog.get_logger(__name__)
 class SessionRepository(Protocol):
     """Structural contract for session persistence."""
 
-    def save(self, session: RefactorSession) -> None: ...
+    def save(self, session: RefactorSession) -> None:
+        ...
 
-    def load(self, session_id: UUID) -> RefactorSession: ...
+    def load(self, session_id: UUID) -> RefactorSession:
+        ...
 
-    def list_active(self) -> list[UUID]: ...
+    def list_active(self) -> list[UUID]:
+        ...
 
-    def delete(self, session_id: UUID) -> None: ...
+    def delete(self, session_id: UUID) -> None:
+        ...
 
 
 class FileSessionRepository:
@@ -48,7 +52,11 @@ class FileSessionRepository:
                     session.model_dump_json(indent=2), encoding="utf-8"
                 )
         except Exception as exc:
-            logger.warning("session.save_failed", session_id=str(session.refactor_id), error=str(exc))
+            logger.warning(
+                "session.save_failed",
+                session_id=str(session.refactor_id),
+                error=str(exc),
+            )
 
     def load(self, session_id: UUID) -> RefactorSession:
         """Load session from JSON file. Raises SessionNotFoundError if missing."""
@@ -66,7 +74,9 @@ class FileSessionRepository:
         try:
             return self.load(session_id)
         except (SessionNotFoundError, Exception) as exc:
-            logger.debug("session.load_miss", session_id=str(session_id), error=str(exc))
+            logger.debug(
+                "session.load_miss", session_id=str(session_id), error=str(exc)
+            )
             return None
 
     def list_active(self) -> list[UUID]:
@@ -129,8 +139,11 @@ class SQLiteSessionRepository:
                     (str(session.refactor_id), json_data),
                 )
         except sqlite3.Error as exc:
-            logger.warning("session.sqlite_save_failed",
-                           session_id=str(session.refactor_id), error=str(exc))
+            logger.warning(
+                "session.sqlite_save_failed",
+                session_id=str(session.refactor_id),
+                error=str(exc),
+            )
 
     def load(self, session_id: UUID) -> RefactorSession:
         """Load session by id. Raises SessionNotFoundError if missing."""

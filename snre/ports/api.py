@@ -26,6 +26,7 @@ logger = structlog.get_logger(__name__)
 
 # ---- request / response schemas ----
 
+
 class StartRefactorRequest(BaseModel):
     target_path: str
     agent_set: list[str] = Field(default_factory=list)
@@ -53,6 +54,7 @@ class ErrorResponse(BaseModel):
 
 
 # ---- app factory ----
+
 
 def create_app(coordinator: Any) -> FastAPI:
     """Build a FastAPI app wired to the given coordinator."""

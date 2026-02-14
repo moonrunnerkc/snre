@@ -69,6 +69,7 @@ class SNREApplication:
 
             # only update recognized config fields
             from dataclasses import fields as dc_fields
+
             valid_fields = {f.name for f in dc_fields(self.config)}
             for key, value in config_data.items():
                 if key in valid_fields:

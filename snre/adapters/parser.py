@@ -19,6 +19,7 @@ def _ensure_cst() -> Any:
     global _cst
     if _cst is None:
         import libcst as cst
+
         _cst = cst
     return _cst
 

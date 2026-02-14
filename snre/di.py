@@ -15,7 +15,9 @@ from snre.agents.registry import AgentRegistry
 from snre.models.config import SNREConfig
 
 
-def _build_repository(config: SNREConfig) -> FileSessionRepository | SQLiteSessionRepository:
+def _build_repository(
+    config: SNREConfig
+) -> FileSessionRepository | SQLiteSessionRepository:
     """Pick storage backend from config."""
     if config.storage_backend == "sqlite":
         return SQLiteSessionRepository(db_path="data/snre.db")

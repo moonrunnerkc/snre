@@ -19,6 +19,7 @@ logger = structlog.get_logger(__name__)
 def _get_coordinator():
     """Lazy coordinator bootstrap -- avoids circular imports at module level."""
     from snre.di import Container
+
     container = Container()
     return container.coordinator
 
@@ -29,9 +30,20 @@ def cli() -> None:
 
 
 @cli.command()
-@click.option("--path", required=True, type=click.Path(exists=True), help="target file to refactor")
+@click.option(
+    "--path",
+    required=True,
+    type=click.Path(exists=True),
+    help="target file to refactor",
+)
 @click.option("--agents", default="pattern_optimizer", help="comma-separated agent ids")
-@click.option("--config", "config_file", default=None, type=click.Path(exists=True), help="config override JSON")
+@click.option(
+    "--config",
+    "config_file",
+    default=None,
+    type=click.Path(exists=True),
+    help="config override JSON",
+)
 @click.option("--verbose", is_flag=True, help="chattier output")
 def start(path: str, agents: str, config_file: str | None, verbose: bool) -> None:
     """Start a refactoring session."""
@@ -126,7 +138,9 @@ def result(refactor_id: str, output: str | None) -> None:
     if session.evolution_history:
         click.echo("Changes made:")
         for step in session.evolution_history:
-            click.echo(f"  - {step.agent}: {step.description} (confidence: {step.confidence:.2f})")
+            click.echo(
+                f"  - {step.agent}: {step.description} (confidence: {step.confidence:.2f})"
+            )
 
 
 @cli.command("list")
@@ -169,7 +183,12 @@ def cancel(refactor_id: str) -> None:
 
 
 @cli.command()
-@click.option("--path", required=True, type=click.Path(exists=True), help="target file to validate")
+@click.option(
+    "--path",
+    required=True,
+    type=click.Path(exists=True),
+    help="target file to validate",
+)
 def validate(path: str) -> None:
     """Validate code syntax and measure complexity."""
     from core.change_tracker import ChangeTracker

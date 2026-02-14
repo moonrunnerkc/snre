@@ -29,9 +29,7 @@ class _YamlSettingsSource(PydanticBaseSettingsSource):
                 if isinstance(section_val, dict):
                     self._yaml_data.update(section_val)
 
-    def get_field_value(
-        self, field: Any, field_name: str
-    ) -> tuple[Any, str, bool]:
+    def get_field_value(self, field: Any, field_name: str) -> tuple[Any, str, bool]:
         val = self._yaml_data.get(field_name)
         return val, field_name, val is not None
 

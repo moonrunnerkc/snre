@@ -51,9 +51,7 @@ class AgentRegistry:
         return agent_id in self._agents
 
     @classmethod
-    def from_profiles(
-        cls, profiles_path: str, config: SNREConfig
-    ) -> "AgentRegistry":
+    def from_profiles(cls, profiles_path: str, config: SNREConfig) -> "AgentRegistry":
         """Load agent_profiles.yaml, instantiate and register all enabled agents.
 
         Discovery order: builtin agents first, then entry point plugins.
@@ -69,8 +67,9 @@ class AgentRegistry:
         # merge in plugins discovered via entry points
         for ep in importlib.metadata.entry_points(group=ENTRY_POINT_GROUP):
             if ep.name in agent_classes:
-                logger.warning("plugin.shadowed_by_builtin",
-                               plugin=ep.name, module=ep.value)
+                logger.warning(
+                    "plugin.shadowed_by_builtin", plugin=ep.name, module=ep.value
+                )
                 continue
             try:
                 agent_classes[ep.name] = ep.load()
