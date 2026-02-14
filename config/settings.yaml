@@ -1,0 +1,40 @@
+swarm:
+  max_concurrent_agents: 5
+  consensus_threshold: 0.6
+  max_iterations: 10
+  timeout_seconds: 300
+  enable_parallel_processing: true
+  
+tracking:
+  enable_evolution_log: true
+  snapshot_frequency: 5
+  max_snapshots: 100
+  retain_logs_days: 30
+  
+integration:
+  git_auto_commit: false
+  backup_original: true
+  create_branch: true
+  branch_prefix: "snre-refactor"
+  
+api:
+  host: "localhost"
+  port: 8000
+  cors_enabled: true
+  rate_limit: 100
+  
+logging:
+  level: "INFO"
+  file: "logs/snre.log"
+  max_file_size_mb: 10
+  backup_count: 5
+  
+security:
+  validate_all_changes: true
+  require_agent_consensus: true
+  block_unsafe_patterns: true
+  
+performance:
+  cache_ast_parsing: true
+  parallel_agent_execution: false
+  max_file_size_mb: 50

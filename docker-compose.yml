@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  snre-api:
+    build:
+      context: .
+      target: production
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./config:/app/config
+    environment:
+      - PYTHONPATH=/app
+      - SNRE_LOG_FORMAT=json
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  snre-dev:
+    build:
+      context: .
+      target: dev
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONPATH=/app
+    profiles:
+      - dev

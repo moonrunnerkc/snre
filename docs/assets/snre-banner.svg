@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 220">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d1117;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#161b22;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#58a6ff"/>
+      <stop offset="100%" style="stop-color:#bc8cff"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#58a6ff;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#bc8cff;stop-opacity:0.05"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="900" height="220" rx="12" fill="url(#bg)"/>
+  <rect x="1" y="1" width="898" height="218" rx="11" fill="none" stroke="url(#accent)" stroke-width="1" opacity="0.3"/>
+
+  <!-- swarm dots -->
+  <circle cx="70" cy="75" r="8" fill="#58a6ff" opacity="0.9"/>
+  <circle cx="95" cy="55" r="6" fill="#79c0ff" opacity="0.7"/>
+  <circle cx="55" cy="52" r="5" fill="#a5d6ff" opacity="0.5"/>
+  <circle cx="105" cy="80" r="4" fill="#58a6ff" opacity="0.6"/>
+  <circle cx="45" cy="78" r="7" fill="#bc8cff" opacity="0.7"/>
+  <circle cx="80" cy="95" r="5" fill="#d2a8ff" opacity="0.5"/>
+  <circle cx="60" cy="100" r="3" fill="#bc8cff" opacity="0.4"/>
+  <circle cx="100" cy="60" r="3" fill="#58a6ff" opacity="0.4"/>
+
+  <!-- connecting lines between dots -->
+  <line x1="70" y1="75" x2="95" y2="55" stroke="#58a6ff" stroke-width="0.8" opacity="0.3"/>
+  <line x1="70" y1="75" x2="45" y2="78" stroke="#bc8cff" stroke-width="0.8" opacity="0.3"/>
+  <line x1="70" y1="75" x2="80" y2="95" stroke="#79c0ff" stroke-width="0.8" opacity="0.25"/>
+  <line x1="95" y1="55" x2="105" y2="80" stroke="#58a6ff" stroke-width="0.8" opacity="0.25"/>
+  <line x1="45" y1="78" x2="55" y2="52" stroke="#d2a8ff" stroke-width="0.8" opacity="0.2"/>
+  <line x1="80" y1="95" x2="60" y2="100" stroke="#bc8cff" stroke-width="0.8" opacity="0.2"/>
+
+  <!-- title -->
+  <text x="140" y="85" font-family="'SF Mono', 'Cascadia Code', 'JetBrains Mono', Consolas, monospace" font-size="48" font-weight="700" fill="url(#accent)">SNRE</text>
+
+  <!-- subtitle -->
+  <text x="140" y="115" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="16" fill="#8b949e" letter-spacing="0.5">Swarm Neural Refactoring Engine</text>
+
+  <!-- tagline -->
+  <text x="140" y="145" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" fill="#6e7681">Distributed agent-based code refactoring for Python</text>
+
+  <!-- version pill -->
+  <rect x="140" y="158" width="48" height="22" rx="11" fill="#1f6feb" opacity="0.2"/>
+  <text x="164" y="173" font-family="'SF Mono', monospace" font-size="11" fill="#58a6ff" text-anchor="middle">v1.0.0</text>
+
+  <!-- python pill -->
+  <rect x="198" y="158" width="68" height="22" rx="11" fill="#238636" opacity="0.2"/>
+  <text x="232" y="173" font-family="'SF Mono', monospace" font-size="11" fill="#3fb950" text-anchor="middle">Python 3.9+</text>
+
+  <!-- license pill -->
+  <rect x="276" y="158" width="76" height="22" rx="11" fill="#8957e5" opacity="0.2"/>
+  <text x="314" y="173" font-family="'SF Mono', monospace" font-size="11" fill="#bc8cff" text-anchor="middle">Apache-2.0</text>
+
+  <!-- right side: mini pipeline diagram -->
+  <g transform="translate(540, 50)">
+    <!-- boxes -->
+    <rect x="0" y="0" width="80" height="32" rx="6" fill="#1f6feb" opacity="0.15" stroke="#58a6ff" stroke-width="0.8"/>
+    <text x="40" y="20" font-family="'SF Mono', monospace" font-size="10" fill="#58a6ff" text-anchor="middle">Agents</text>
+
+    <rect x="110" y="0" width="80" height="32" rx="6" fill="#8957e5" opacity="0.15" stroke="#bc8cff" stroke-width="0.8"/>
+    <text x="150" y="20" font-family="'SF Mono', monospace" font-size="10" fill="#bc8cff" text-anchor="middle">Consensus</text>
+
+    <rect x="220" y="0" width="80" height="32" rx="6" fill="#238636" opacity="0.15" stroke="#3fb950" stroke-width="0.8"/>
+    <text x="260" y="20" font-family="'SF Mono', monospace" font-size="10" fill="#3fb950" text-anchor="middle">Output</text>
+
+    <!-- arrows -->
+    <line x1="82" y1="16" x2="108" y2="16" stroke="#6e7681" stroke-width="1.2" marker-end="url(#arrowhead)"/>
+    <line x1="192" y1="16" x2="218" y2="16" stroke="#6e7681" stroke-width="1.2" marker-end="url(#arrowhead)"/>
+
+    <!-- agent sub-labels -->
+    <text x="10" y="52" font-family="'SF Mono', monospace" font-size="9" fill="#6e7681">security</text>
+    <text x="10" y="64" font-family="'SF Mono', monospace" font-size="9" fill="#6e7681">patterns</text>
+    <text x="10" y="76" font-family="'SF Mono', monospace" font-size="9" fill="#6e7681">loops</text>
+
+    <text x="120" y="52" font-family="'SF Mono', monospace" font-size="9" fill="#6e7681">vote + rank</text>
+    <text x="120" y="64" font-family="'SF Mono', monospace" font-size="9" fill="#6e7681">threshold</text>
+
+    <text x="230" y="52" font-family="'SF Mono', monospace" font-size="9" fill="#6e7681">refactored</text>
+    <text x="230" y="64" font-family="'SF Mono', monospace" font-size="9" fill="#6e7681">code + diff</text>
+  </g>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#6e7681"/>
+    </marker>
+  </defs>
+</svg>
