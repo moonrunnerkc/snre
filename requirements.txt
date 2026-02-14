@@ -5,6 +5,7 @@ click==8.1.7
 pyyaml==6.0.1
 fastapi>=0.109.0
 uvicorn>=0.27.0
+flask>=3.0.0
 
 # Code analysis and modification
 libcst==1.1.0

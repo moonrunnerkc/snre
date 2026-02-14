@@ -7,6 +7,7 @@ Storage backend is selected via SNREConfig.storage_backend.
 import os
 import sqlite3
 from pathlib import Path
+from typing import Optional
 from typing import Protocol
 from uuid import UUID
 
@@ -69,7 +70,7 @@ class FileSessionRepository:
             raw = Path(path).read_text(encoding="utf-8")
         return RefactorSession.model_validate_json(raw)
 
-    def load_or_none(self, session_id: UUID) -> RefactorSession | None:
+    def load_or_none(self, session_id: UUID) -> Optional[RefactorSession]:
         """Load session, returning None instead of raising on miss."""
         try:
             return self.load(session_id)

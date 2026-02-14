@@ -5,6 +5,9 @@ No framework -- just explicit construction and wiring.
 Tests create their own Container with mock implementations.
 """
 
+from typing import Optional
+from typing import Union
+
 from core.change_tracker import ChangeTracker
 from core.consensus_engine import ConsensusEngine
 from core.evolution_recorder import EvolutionRecorder
@@ -16,8 +19,8 @@ from snre.models.config import SNREConfig
 
 
 def _build_repository(
-    config: SNREConfig
-) -> FileSessionRepository | SQLiteSessionRepository:
+    config: SNREConfig,
+) -> Union[FileSessionRepository, SQLiteSessionRepository]:
     """Pick storage backend from config."""
     if config.storage_backend == "sqlite":
         return SQLiteSessionRepository(db_path="data/snre.db")
@@ -29,7 +32,7 @@ class Container:
 
     def __init__(
         self,
-        config: SNREConfig | None = None,
+        config: Optional[SNREConfig] = None,
         profiles_path: str = "config/agent_profiles.yaml",
     ) -> None:
         self.config = config or SNREConfig()

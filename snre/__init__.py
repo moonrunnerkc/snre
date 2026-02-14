@@ -6,11 +6,12 @@ SNRE -- Swarm Neural Refactoring Engine
 import logging
 import os
 import sys
+from typing import Optional
 
 import structlog
 
 
-def configure_logging(json_output: bool | None = None) -> None:
+def configure_logging(json_output: Optional[bool] = None) -> None:
     """Wire up structlog. JSON in production, colored console in dev.
 
     Call once at startup. Safe to call again -- replaces processors.

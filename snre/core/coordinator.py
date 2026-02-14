@@ -63,7 +63,7 @@ class SwarmCoordinator:
         repository: SessionRepository,
         tracker: ChangeTracker,
         consensus_fn: Callable[[dict[str, dict[str, float]], float], ConsensusDecision],
-        on_step_complete: Callable[[EvolutionStep], None] | None = None,
+        on_step_complete: Optional[Callable[[EvolutionStep], None]] = None,
     ) -> None:
         self.config = config
         self.registry = registry

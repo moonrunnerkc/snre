@@ -6,6 +6,7 @@ Testable with click.testing.CliRunner.
 
 import json
 import sys
+from typing import Optional
 from uuid import UUID
 
 import click
@@ -45,7 +46,7 @@ def cli() -> None:
     help="config override JSON",
 )
 @click.option("--verbose", is_flag=True, help="chattier output")
-def start(path: str, agents: str, config_file: str | None, verbose: bool) -> None:
+def start(path: str, agents: str, config_file: Optional[str], verbose: bool) -> None:
     """Start a refactoring session."""
     coordinator = _get_coordinator()
     agent_list = [a.strip() for a in agents.split(",")]
@@ -96,7 +97,7 @@ def status(refactor_id: str) -> None:
 @cli.command()
 @click.argument("refactor_id")
 @click.option("--output", default=None, help="write results to file")
-def result(refactor_id: str, output: str | None) -> None:
+def result(refactor_id: str, output: Optional[str]) -> None:
     """Get session results."""
     coordinator = _get_coordinator()
     try:
