@@ -1,5 +1,5 @@
 # Core dependencies
-pydantic==2.5.0
+pydantic>=2.5.0
 pydantic-settings>=2.1.0
 click==8.1.7
 pyyaml==6.0.1
@@ -9,8 +9,8 @@ uvicorn>=0.27.0
 # Code analysis and modification
 libcst==1.1.0
 
-# Version control integration
-pygit2==1.13.3
+# Version control integration (requires system libgit2)
+# pygit2==1.13.3
 
 # Concurrency
 filelock>=3.13.0
